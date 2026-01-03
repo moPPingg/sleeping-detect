@@ -75,6 +75,7 @@ coverage.xml
 # *.pkl
 # *.h5
 # *.model
+*.task
 
 # Data files (if large, uncomment to ignore)
 # *.csv
