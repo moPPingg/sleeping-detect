@@ -82,6 +82,13 @@ coverage.xml
 # *.json
 # *.xlsx
 
+# Video files (too large for GitHub)
+videos/
+*.MOV
+*.mp4
+*.avi
+*.mkv
+
 # Logs
 *.log
 
