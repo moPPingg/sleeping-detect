@@ -3,8 +3,9 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.8-green?logo=opencv)
-![Accuracy](https://img.shields.io/badge/Accuracy-99.5%25-brightgreen)
+![Accuracy](https://img.shields.io/badge/Accuracy-99.51%25-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
+![GitHub stars](https://img.shields.io/github/stars/moPPingg/sleeping-detect?style=social)
 
 <div align="center">
 
@@ -14,13 +15,15 @@
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Documentation](#-documentation) • [Results](#-results)
 
+**[⭐ Star this repo](https://github.com/moPPingg/sleeping-detect)** • **[📖 View Report](https://moPPingg.github.io/sleeping-detect/Project_Report.html)**
+
 </div>
 
 ---
 
 ## 🎯 Project Overview
 
-Driver drowsiness causes ~100,000 crashes annually. This project implements an **AI-powered real-time detection system** using computer vision and machine learning to monitor driver alertness and provide timely warnings.
+Driver drowsiness causes **~100,000 crashes annually**. This project implements an **AI-powered real-time detection system** using computer vision and machine learning to monitor driver alertness and provide timely warnings.
 
 ### What Makes This Special?
 
@@ -74,8 +77,8 @@ Driver drowsiness causes ~100,000 crashes annually. This project implements an *
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/driver-monitoring-system.git
-cd driver-monitoring-system
+git clone https://github.com/moPPingg/sleeping-detect.git
+cd sleeping-detect
 
 # 2. Install dependencies
 pip install -r requirements.txt
@@ -89,7 +92,7 @@ python drowsiness_detection_system.py
 ```bash
 pip install numpy pandas opencv-python mediapipe
 pip install scikit-learn xgboost pyttsx3
-pip install matplotlib seaborn notebook
+pip install matplotlib seaborn
 ```
 
 ---
@@ -131,28 +134,30 @@ python model_trainer.py
 
 Trains Random Forest model on collected data and saves to `drowsiness_model.pkl`.
 
-### 4. Compare ML Algorithms
+### 4. Generate Visualizations
 
 ```bash
-jupyter notebook ml_models_comparison.ipynb
+python charts.py
 ```
 
-Compare 6 different ML algorithms with detailed metrics and visualizations.
+Creates professional charts for confusion matrix, feature importance, and data distribution.
 
 ### 5. View Complete Documentation
 
-```bash
-jupyter notebook project_documentation.ipynb
-```
+Open `Project_Report.html` in your browser for comprehensive technical documentation with:
+- Complete ML workflow and analysis
+- Performance metrics and visualizations
+- Deployment guide and troubleshooting
+- Future improvements roadmap
 
-Comprehensive notebook with project details, visualizations, and technical analysis.
+**[📖 View Online Report](https://moPPingg.github.io/sleeping-detect/Project_Report.html)**
 
 ---
 
 ## 📁 Project Structure
 
 ```
-driver-monitoring-system/
+sleeping-detect/
 │
 ├── 🎯 Core System (Production Ready)
 │   ├── drowsiness_detection_system.py    # Main application
@@ -161,25 +166,23 @@ driver-monitoring-system/
 │   ├── glasses_detector.py               # Glasses detection module
 │   ├── drowsiness_model.pkl              # Trained Random Forest model
 │   ├── scaler.pkl                        # Feature standardization scaler
-│   └── face_landmarker.task              # MediaPipe model file
+│   └── haarcascade_eye_tree_eyeglasses.xml
 │
 ├── 🤖 Development Tools
 │   ├── data_collector.py                 # Data collection script
 │   ├── model_trainer.py                  # Model training script
-│   ├── ml_models_comparison.ipynb        # ML algorithm comparison
-│   └── project_documentation.ipynb       # Full project docs
+│   └── charts.py                         # Visualization generation
 │
-├── 📊 Data & Models
-│   ├── face_data.csv                     # Training dataset (3,052 samples)
-│   ├── drowsiness_model.pkl              # Trained model
-│   └── scaler.pkl                        # Data scaler
+├── 📊 Visualizations
+│   ├── confusion_matrix.png              # Model performance matrix
+│   ├── feature_importance.png            # Top features chart
+│   └── data_balance.png                  # Dataset distribution
 │
 └── 📄 Documentation
     ├── README.md                         # This file
+    ├── Project_Report.html               # Complete technical report
     ├── QUICK_START.md                    # Quick reference guide
-    ├── PROJECT_SUMMARY.md                # Project overview
-    ├── requirements.txt                  # Python dependencies
-    └── PROJECT_COMPLETE.txt              # Project completion summary
+    └── requirements.txt                  # Python dependencies
 ```
 
 ---
@@ -199,19 +202,22 @@ driver-monitoring-system/
 
 **Winner:** Random Forest - Best balance of accuracy, speed, and robustness
 
+### System Performance Specifications
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| **Average FPS** | 25-30 FPS | On standard CPU (Intel i5/i7) |
+| **Latency** | < 50ms | Per frame processing time |
+| **Model Size** | < 10MB | Lightweight, memory-efficient |
+| **Hardware** | No GPU Required | Pure CPU inference |
+| **Test Accuracy** | **99.51%** | Random Forest classifier |
+
 ### Dataset Statistics
 
 - **Total Samples**: 3,052
-- **Features**: 956 (478 landmarks × 2 coordinates)
+- **Features**: 936 (468 landmarks × 2 coordinates)
 - **Classes**: 4 (balanced distribution: ~750 samples each)
 - **Train/Test Split**: 80/20 with stratification
-
-### System Performance
-
-- **FPS**: 30+ frames per second
-- **Latency**: <33ms per frame
-- **Detection Rate**: Real-time
-- **False Positive Rate**: <1%
 
 ---
 
@@ -229,7 +235,7 @@ driver-monitoring-system/
 
 **Face Detection:**
 - MediaPipe Face Mesh (Google)
-- 478 3D facial landmarks
+- 468 3D facial landmarks
 - Real-time performance optimization
 
 **Feature Extraction:**
@@ -254,15 +260,19 @@ driver-monitoring-system/
 ### Quick References
 
 - **README.md** (this file) - Complete documentation
+- **[Project_Report.html](Project_Report.html)** - Comprehensive technical report
 - **QUICK_START.md** - 3-minute setup guide
-- **PROJECT_SUMMARY.md** - Project overview & metrics
-- **PROJECT_COMPLETE.txt** - Completion checklist
+- **requirements.txt** - Python dependencies
 
-### Technical Documentation
+### Technical Report Contents
 
-- **project_documentation.ipynb** - Comprehensive technical notebook
-- **ml_models_comparison.ipynb** - ML algorithm comparison
-- **Code Comments** - Extensive inline documentation
+The HTML report includes:
+- ✅ Complete ML workflow and methodology
+- ✅ 6 algorithm comparison with metrics
+- ✅ Confusion matrix and feature importance analysis
+- ✅ System architecture and data pipeline
+- ✅ Deployment guide and troubleshooting
+- ✅ Future improvements roadmap
 
 ---
 
@@ -307,22 +317,23 @@ This will train a new model and save it.
 
 ## 🔮 Future Enhancements
 
-### Planned Features
-
-- 🚗 Steering wheel grip detection
-- 🛣️ Lane departure warning
-- ⚡ Driver attention level scoring
-- 📊 Session analytics dashboard
-- ☁️ Cloud logging for fleet management
+### Short Term (1-3 months)
+- 👓 Glasses detection support
+- 👥 Multi-face tracking
+- 📊 Session recording & analytics
 - 📱 Mobile app integration
 
-### Technical Improvements
-
+### Medium Term (3-6 months)
 - 🧠 Deep learning models (CNN, LSTM)
 - 🎯 Transfer learning from pre-trained models
 - 🌙 Enhanced night mode detection
-- 👓 Better glasses handling
 - 🌍 Multi-language support
+
+### Long Term (6-12 months)
+- 🚗 Steering wheel grip detection
+- 🛣️ Lane departure warning
+- ☁️ Cloud-based fleet management
+- 📱 iOS/Android native apps
 
 ---
 
@@ -354,22 +365,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Your Name**
-- 📧 Email: your.email@example.com
-- 💼 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- 🐙 GitHub: [github.com/yourusername](https://github.com/yourusername)
+**moPPingg**
+
+- 🐙 GitHub: [@moPPingg](https://github.com/moPPingg)
+- 📧 Project Link: [https://github.com/moPPingg/sleeping-detect](https://github.com/moPPingg/sleeping-detect)
+- 📖 Documentation: [Project Report](https://moPPingg.github.io/sleeping-detect/Project_Report.html)
 
 ---
 
 ## 🙏 Acknowledgments
 
 ### Technologies
+
 - [OpenCV](https://opencv.org/) - Computer vision library
 - [MediaPipe](https://google.github.io/mediapipe/) - Face mesh by Google
 - [scikit-learn](https://scikit-learn.org/) - ML toolkit
 - [XGBoost](https://xgboost.readthedocs.io/) - Gradient boosting library
 
 ### Inspiration
+
 Developed as a Data Science project demonstrating practical ML skills in real-world safety applications.
 
 ---
@@ -381,13 +395,15 @@ Developed as a Data Science project demonstrating practical ML skills in real-wo
 - **Model Accuracy**: 99.51%
 - **Processing Speed**: 30+ FPS
 - **Models Compared**: 6
-- **Development Time**: 5 weeks
+- **Technologies**: 10+
 
 ---
 
 ## ⭐ Star History
 
 If you find this project useful, please consider giving it a star! ⭐
+
+[![Star History Chart](https://api.star-history.com/svg?repos=moPPingg/sleeping-detect&type=Date)](https://star-history.com/#moPPingg/sleeping-detect&Date)
 
 ---
 
@@ -397,6 +413,8 @@ If you find this project useful, please consider giving it a star! ⭐
 
 **Made with ❤️ and Python**
 
-*Last Updated: January 6, 2026*
+*Last Updated: January 2026*
+
+[⬆ Back to Top](#driver-monitoring-system-dms)
 
 </div>
