@@ -1,13 +1,46 @@
+# ============================================================================
+# DRIVER MONITORING SYSTEM - .gitignore
+# ============================================================================
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-venv/
+
+# Virtual Environment
 .venv/
+venv/
 ENV/
+env/
+.virtualenv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Distribution / packaging
 build/
 develop-eggs/
 dist/
@@ -24,31 +57,44 @@ wheels/
 .installed.cfg
 *.egg
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
+# PyInstaller
+*.manifest
+*.spec
 
-# IDEs
-.vscode/
-.idea/
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Temporary files
+*.tmp
+*.log
+*.bak
 *.swp
-*.swo
-*~
+*~.nib
 
-# OS
-.DS_Store
-Thumbs.db
+# Model files (uncomment if models are too large for GitHub)
+# *.pkl
 
-# Project specific
-videos/
-models/
-*.mov
-*.mp4
-*.avi
-temp/
-logs/
+# Data files (uncomment if datasets are too large for GitHub)
+# *.csv
+# face_data.csv
 
-# Keep these
-!face_landmarker.task
-!drowsiness_model.pkl
-!scaler.pkl
+# MediaPipe models (keep face_landmarker.task in repo)
+# *.task
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Environment variables
+.env
+.env.local
