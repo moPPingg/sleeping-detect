@@ -1,381 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driver Monitoring System - Technical Report</title>
-<style>
-/* Reset and Base */
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
-
-body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-font-size: 17px;
-line-height: 1.7;
-color: #2d3748;
-background: #ffffff;
-max-width: 1100px;
-margin: 0 auto;
-padding: 40px 30px;
-}
-
-/* Typography - Clear Hierarchy */
-h1 {
-font-size: 2.5rem;
-font-weight: 800;
-color: #1a202c;
-margin: 2.5rem 0 1.25rem 0;
-line-height: 1.2;
-border-bottom: 3px solid #2d3748;
-padding-bottom: 0.75rem;
-}
-
-h2 {
-font-size: 2rem;
-font-weight: 700;
-color: #2d3748;
-margin: 2.25rem 0 1rem 0;
-line-height: 1.3;
-}
-
-h3 {
-font-size: 1.5rem;
-font-weight: 700;
-color: #374151;
-margin: 1.75rem 0 0.875rem 0;
-line-height: 1.4;
-}
-
-h4 {
-font-size: 1.25rem;
-font-weight: 700;
-color: #4b5563;
-margin: 1.25rem 0 0.625rem 0;
-line-height: 1.4;
-}
-
-p {
-margin: 0.875rem 0;
-color: #4b5563;
-font-size: 1rem;
-line-height: 1.75;
-}
-
-strong {
-font-weight: 700;
-color: #1a202c;
-}
-
-/* Lists */
-ul, ol {
-margin: 1rem 0 1rem 2rem;
-color: #4b5563;
-}
-
-li {
-margin: 0.625rem 0;
-line-height: 1.65;
-}
-
-/* Tables */
-table {
-width: 100%;
-border-collapse: collapse;
-margin: 1.75rem 0;
-background: #ffffff;
-border: 2px solid #e5e7eb;
-}
-
-th {
-background: #f9fafb;
-color: #1a202c;
-font-weight: 700;
-padding: 0.875rem 1rem;
-text-align: left;
-border: 1px solid #e5e7eb;
-}
-
-td {
-padding: 0.75rem 1rem;
-border: 1px solid #e5e7eb;
-color: #4b5563;
-line-height: 1.5;
-}
-
-tr:nth-child(even) {
-background: #f9fafb;
-}
-
-tr:hover {
-background: #f3f4f6;
-}
-
-/* Code Blocks - FIXED FOR READABILITY */
-code {
-background: #f3f4f6;
-padding: 0.2rem 0.4rem;
-border-radius: 3px;
-font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-font-size: 0.9em;
-color: #1a202c;
-border: 1px solid #e5e7eb;
-}
-
-pre {
-background: #f9fafb;
-padding: 1.25rem;
-border-radius: 6px;
-overflow-x: auto;
-border: 2px solid #e5e7eb;
-margin: 1.25rem 0;
-}
-
-pre code {
-background: none;
-padding: 0;
-border: none;
-font-size: 0.9em;
-line-height: 1.5;
-color: #1a202c;
-}
-
-/* Header Section */
-.header-section {
-text-align: center;
-padding: 3rem 2.5rem;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-border-radius: 8px;
-margin-bottom: 3rem;
-color: #ffffff;
-}
-
-.header-section h1 {
-font-size: 2.75rem;
-margin: 0 0 1rem 0;
-border: none;
-padding: 0;
-color: #ffffff;
-}
-
-.header-section h2 {
-font-size: 1.5rem;
-font-weight: 600;
-color: #e0e7ff;
-margin: 0.75rem 0;
-}
-
-.header-section p {
-font-size: 1.125rem;
-color: #c7d2fe;
-margin-top: 0.75rem;
-}
-
-/* Stats Grid */
-.stats-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-gap: 1.5rem;
-margin: 2.5rem 0;
-}
-
-.stat-card {
-background: #f9fafb;
-border: 2px solid #e5e7eb;
-border-radius: 8px;
-padding: 2rem 1.5rem;
-text-align: center;
-transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.stat-card:hover {
-transform: translateY(-3px);
-box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-.stat-card h2 {
-font-size: 2.5rem;
-margin: 0 0 0.5rem 0;
-color: #667eea;
-font-weight: 800;
-line-height: 1;
-}
-
-.stat-card p {
-margin: 0.375rem 0;
-color: #6b7280;
-font-weight: 600;
-}
-
-/* Images */
-img {
-max-width: 80%;
-height: auto;
-display: block;
-margin: 2rem auto;
-border: 2px solid #e5e7eb;
-border-radius: 8px;
-box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-
-/* Horizontal Rules */
-hr {
-border: none;
-border-top: 2px solid #e5e7eb;
-margin: 2.5rem 0;
-}
-
-/* Links */
-a {
-color: #667eea;
-text-decoration: none;
-border-bottom: 2px solid transparent;
-transition: all 0.2s;
-font-weight: 600;
-}
-
-a:hover {
-color: #764ba2;
-border-bottom-color: #764ba2;
-}
-
-/* Info Boxes */
-.info-box {
-background: #f0f9ff;
-border-left: 4px solid #667eea;
-padding: 1.25rem 1.75rem;
-margin: 1.75rem 0;
-border-radius: 6px;
-}
-
-.info-box strong {
-font-size: 1.0625rem;
-display: block;
-margin-bottom: 0.625rem;
-color: #1e40af;
-}
-
-/* Command Box - FIXED DESIGN */
-.command-box {
-background: #f9fafb;
-border: 2px solid #667eea;
-border-radius: 8px;
-padding: 1.5rem;
-margin: 1.75rem 0;
-}
-
-.command-box h3 {
-margin: 0 0 1rem 0;
-color: #667eea;
-font-size: 1.25rem;
-}
-
-.command-box pre {
-background: #ffffff;
-border: 2px solid #e5e7eb;
-padding: 1rem;
-margin: 0.75rem 0;
-}
-
-.command-box code {
-color: #059669;
-font-weight: 600;
-font-size: 0.95em;
-}
-
-.command-box p {
-color: #6b7280;
-font-size: 0.9375rem;
-margin: 0.75rem 0 0 0;
-}
-
-/* Footer */
-footer {
-text-align: center;
-padding: 2.5rem 0;
-margin-top: 3rem;
-border-top: 2px solid #e5e7eb;
-color: #6b7280;
-}
-
-footer p {
-margin: 0.375rem 0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-body {
-padding: 1.25rem;
-font-size: 16px;
-}
-
-h1 {
-font-size: 2rem;
-}
-
-h2 {
-font-size: 1.75rem;
-}
-
-h3 {
-font-size: 1.375rem;
-}
-
-.stats-grid {
-grid-template-columns: 1fr;
-gap: 1.25rem;
-}
-
-.header-section h1 {
-font-size: 2rem;
-}
-
-img {
-max-width: 95%;
-}
-}
-</style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Driver Monitoring System - Technical Report</title>
+ <style>
+ /* Reset and Base */
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+ font-size: 18px;
+ line-height: 1.8;
+ color: #000000;
+ background: #ffffff;
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 40px 30px;
+ }
+ 
+ /* Typography - Larger, Bolder, Clearer */
+ h1 {
+ font-size: 2.75rem;
+ font-weight: 800;
+ color: #000000;
+ margin: 3rem 0 1.5rem 0;
+ line-height: 1.2;
+ border-bottom: 4px solid #000000;
+ padding-bottom: 1rem;
+ letter-spacing: -0.5px;
+ }
+ 
+ h2 {
+ font-size: 2.25rem;
+ font-weight: 700;
+ color: #000000;
+ margin: 2.5rem 0 1.25rem 0;
+ line-height: 1.3;
+ letter-spacing: -0.3px;
+ }
+ 
+ h3 {
+ font-size: 1.75rem;
+ font-weight: 700;
+ color: #000000;
+ margin: 2rem 0 1rem 0;
+ line-height: 1.4;
+ }
+ 
+ h4 {
+ font-size: 1.375rem;
+ font-weight: 700;
+ color: #000000;
+ margin: 1.5rem 0 0.75rem 0;
+ line-height: 1.4;
+ }
+ 
+ p {
+ margin: 1rem 0;
+ color: #000000;
+ font-size: 1.0625rem;
+ line-height: 1.85;
+ text-align: left;
+ }
+ 
+ strong {
+ font-weight: 700;
+ color: #000000;
+ }
+ 
+ /* Lists - Better spacing */
+ ul, ol {
+ margin: 1.25rem 0 1.25rem 2.5rem;
+ color: #000000;
+ }
+ 
+ li {
+ margin: 0.75rem 0;
+ line-height: 1.75;
+ font-size: 1.0625rem;
+ }
+ 
+ /* Tables - Cleaner design */
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ margin: 2rem 0;
+ background: #ffffff;
+ border: 2px solid #dddddd;
+ font-size: 1rem;
+ }
+ 
+ th {
+ background: #f9f9f9;
+ color: #000000;
+ font-weight: 700;
+ padding: 1rem 1.25rem;
+ text-align: left;
+ border: 1px solid #dddddd;
+ font-size: 1.0625rem;
+ }
+ 
+ td {
+ padding: 0.875rem 1.25rem;
+ border: 1px solid #dddddd;
+ color: #000000;
+ line-height: 1.6;
+ }
+ 
+ tr:nth-child(even) {
+ background: #f9f9f9;
+ }
+ 
+ tr:hover {
+ background: #f5f5f5;
+ }
+ 
+ /* Code Blocks - Better readability */
+ code {
+ background: #f5f5f5;
+ padding: 0.25rem 0.5rem;
+ border-radius: 4px;
+ font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+ font-size: 0.9375rem;
+ color: #000000;
+ border: 1px solid #dddddd;
+ }
+ 
+ pre {
+ background: #f9f9f9;
+ padding: 1.5rem;
+ border-radius: 6px;
+ overflow-x: auto;
+ border: 2px solid #dddddd;
+ margin: 1.5rem 0;
+ line-height: 1.6;
+ }
+ 
+ pre code {
+ background: none;
+ padding: 0;
+ border: none;
+ font-size: 0.9375rem;
+ line-height: 1.6;
+ }
+ 
+ /* Header Section - Professional */
+ .header-section {
+ text-align: center;
+ padding: 4rem 3rem;
+ background: #f9f9f9;
+ border: 3px solid #dddddd;
+ border-radius: 10px;
+ margin-bottom: 4rem;
+ }
+ 
+ .header-section h1 {
+ font-size: 3.25rem;
+ margin: 0 0 1.5rem 0;
+ border: none;
+ padding: 0;
+ font-weight: 800;
+ }
+ 
+ .header-section h2 {
+ font-size: 1.75rem;
+ font-weight: 600;
+ color: #000000;
+ margin: 1rem 0;
+ }
+ 
+ .header-section p {
+ font-size: 1.25rem;
+ color: #555555;
+ margin-top: 1rem;
+ text-align: center;
+ }
+ 
+ /* Stats Grid - Clean cards */
+ .stats-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 2rem;
+ margin: 3rem 0;
+ }
+ 
+ .stat-card {
+ background: #f9f9f9;
+ border: 2px solid #dddddd;
+ border-radius: 8px;
+ padding: 2.5rem 2rem;
+ text-align: center;
+ transition: transform 0.2s, box-shadow 0.2s;
+ }
+ 
+ .stat-card:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+ }
+ 
+ .stat-card h2 {
+ font-size: 3rem;
+ margin: 0 0 0.75rem 0;
+ color: #000000;
+ font-weight: 800;
+ line-height: 1;
+ }
+ 
+ .stat-card p {
+ margin: 0.5rem 0;
+ color: #555555;
+ font-size: 1.0625rem;
+ text-align: center;
+ font-weight: 600;
+ }
+ 
+ /* Section Divider - Bold */
+ .section-divider {
+ text-align: center;
+ padding: 3rem 2rem;
+ background: #f9f9f9;
+ border: 2px solid #dddddd;
+ border-radius: 8px;
+ margin: 4rem 0 3rem 0;
+ }
+ 
+ .section-divider h1 {
+ font-size: 2.5rem;
+ margin: 0;
+ border: none;
+ padding: 0;
+ font-weight: 800;
+ }
+ 
+ .section-divider h2 {
+ font-size: 1.375rem;
+ font-weight: 600;
+ color: #555555;
+ margin: 0.75rem 0 0 0;
+ }
+ 
+ .section-divider p {
+ font-size: 1.125rem;
+ color: #555555;
+ margin: 0.5rem 0 0 0;
+ }
+ 
+ /* Info Boxes - Cleaner */
+ .info-box {
+ background: #f9f9f9;
+ border-left: 5px solid #000000;
+ padding: 1.5rem 2rem;
+ margin: 2rem 0;
+ border-radius: 6px;
+ line-height: 1.75;
+ }
+ 
+ .info-box strong {
+ font-size: 1.125rem;
+ display: block;
+ margin-bottom: 0.75rem;
+ }
+ 
+ /* Images */
+ img {
+ max-width: 100%;
+ height: auto;
+ display: block;
+ margin: 2rem auto;
+ border: 2px solid #dddddd;
+ border-radius: 6px;
+ box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+ }
+ 
+ /* Horizontal Rules */
+ hr {
+ border: none;
+ border-top: 3px solid #dddddd;
+ margin: 3rem 0;
+ }
+ 
+ /* Links - More visible */
+ a {
+ color: #2563eb;
+ text-decoration: none;
+ border-bottom: 2px solid transparent;
+ transition: all 0.2s;
+ font-weight: 600;
+ }
+ 
+ a:hover {
+ color: #1e40af;
+ border-bottom-color: #1e40af;
+ }
+ 
+ /* Footer */
+ footer {
+ text-align: center;
+ padding: 3rem 0;
+ margin-top: 4rem;
+ border-top: 3px solid #dddddd;
+ color: #555555;
+ font-size: 1rem;
+ }
+ 
+ footer p {
+ margin: 0.5rem 0;
+ }
+ 
+ /* Print Styles */
+ @media print {
+ body {
+ max-width: 100%;
+ font-size: 12pt;
+ padding: 20px;
+ }
+ 
+ .header-section {
+ border: 3px solid #000;
+ background: none;
+ }
+ 
+ .stat-card {
+ break-inside: avoid;
+ }
+ }
+ 
+ /* Responsive */
+ @media (max-width: 768px) {
+ body {
+ padding: 1.5rem;
+ font-size: 16px;
+ }
+ 
+ h1 {
+ font-size: 2rem;
+ }
+ 
+ h2 {
+ font-size: 1.75rem;
+ }
+ 
+ h3 {
+ font-size: 1.5rem;
+ }
+ 
+ .stats-grid {
+ grid-template-columns: 1fr;
+ gap: 1.5rem;
+ }
+ 
+ .header-section h1 {
+ font-size: 2.25rem;
+ }
+ }
+ </style>
 </head>
 <body>
 
 <div class="header-section">
-<h1>Driver Monitoring System</h1>
-<h2>AI-Powered Real-Time Drowsiness Detection</h2>
-<p>Computer Vision and Machine Learning for Road Safety</p>
+ <h1>Driver Monitoring System</h1>
+ <h2>AI-Powered Real-Time Drowsiness Detection</h2>
+ <p>Computer Vision and Machine Learning for Road Safety</p>
+</div>
+
+<div style="background: #f5f5f5; border: 3px solid #000000; border-radius: 10px; padding: 3rem 2rem; margin: 3rem 0; text-align: center; position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+    <div style="color: #dddddd;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">▶️</div>
+        <h3 style="color: #ffffff; margin: 1rem 0; font-size: 1.5rem; font-weight: 700;">System Demo Preview</h3>
+        <p style="color: #777777; font-size: 1.125rem; margin: 0.5rem 0;">[INSERT DEMO GIF HERE]</p>
+        <p style="color: #666666; font-size: 1rem; margin: 1rem 0 0 0; font-style: italic;">A 10-second animation showing the system detecting 'Microsleep' in real-time</p>
+        <div style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.1); border-radius: 6px; display: inline-block;">
+            <span style="color: #000000; font-weight: 600;">● LIVE</span>
+            <span style="color: #dddddd; margin-left: 1rem;">Real-time Detection @ 30 FPS</span>
+        </div>
+    </div>
 </div>
 
 <div class="stats-grid">
-<div class="stat-card">
-<h2>99.51%</h2>
-<p>Model Accuracy</p>
-</div>
-<div class="stat-card">
-<h2>30+ FPS</h2>
-<p>Real-Time Performance</p>
-</div>
-<div class="stat-card">
-<h2>3,052</h2>
-<p>Training Samples</p>
-</div>
-<div class="stat-card">
-<h2>6</h2>
-<p>ML Algorithms</p>
-</div>
+ <div class="stat-card">
+ <h2>99.51%</h2>
+ <p>Model Accuracy</p>
+ </div>
+ <div class="stat-card">
+ <h2>30+ FPS</h2>
+ <p>Real-Time Performance</p>
+ </div>
+ <div class="stat-card">
+ <h2>3,052</h2>
+ <p>Training Samples</p>
+ </div>
+ <div class="stat-card">
+ <h2>6</h2>
+ <p>ML Algorithms</p>
+ </div>
 </div>
 
-<div style="background: #f8f9fa; padding: 1.75rem; border: 1px solid #dee2e6; border-radius: 8px; margin: 2rem 0;">
+<div style="background: #f9f9f9; padding: 2rem; border: 1px solid #dddddd; border-radius: 8px; margin: 2rem 0;">
 <h2 style="margin-top: 0; border: none; padding: 0;">Table of Contents</h2>
-<ol style="line-height: 1.8; margin: 1rem 0 0 1.5rem;">
+<ol style="line-height: 2; margin: 1rem 0 0 1.5rem;">
 <li><a href="#1-project-overview">Project Overview</a></li>
-<li><a href="#2-system-architecture">System Architecture</a></li>
-<li><a href="#3-model-evaluation">Model Evaluation & Results</a></li>
-<li><a href="#4-deployment">Deployment Guide</a></li>
-<li><a href="#5-future-improvements">Future Improvements</a></li>
-<li><a href="#6-conclusions">Conclusions</a></li>
-<li><a href="#technology-stack">Technology Stack</a></li>
+<li><a href="#2-system-architecture">System Architecture & Data Pipeline</a></li>
+<li><a href="#3-setup-installation">Setup & Installation</a></li>
+<li><a href="#4-model-evaluation">Model Evaluation & Visualization</a></li>
+<li><a href="#5-deployment">Deployment Guide</a></li>
+<li><a href="#6-future-improvements">Future Improvements</a></li>
+<li><a href="#7-conclusions">Conclusions</a></li>
+<li><a href="#technology-stack">Technology Stack & References</a></li>
 </ol>
 </div>
 
@@ -386,51 +421,76 @@ max-width: 95%;
 
 <h3>Problem Statement</h3>
 
-<p>Drowsy driving causes approximately <strong>100,000 crashes annually</strong> in the US alone, resulting in 71,000 injuries, 1,550 fatalities, and $12.5 billion in losses.</p>
+<div style="background: #f9f9f9; border-left: 4px solid #495057; padding: 20px; margin: 20px 0; border-radius: 5px;">
+<strong> The Challenge:</strong><br><br>
+Drowsy driving causes approximately <strong>100,000 crashes annually</strong> in the US alone, resulting in:
+<ul>
+<li>71,000 injuries</li>
+<li>1,550 fatalities</li>
+<li>$12.5 billion in monetary losses</li>
+</ul>
+</div>
 
 <h3>Our Solution</h3>
 
-<p>An AI-powered real-time detection system that:</p>
-
+<div style="background: #f9f9f9; border-left: 4px solid #495057; padding: 20px; margin: 20px 0; border-radius: 5px;">
+<strong> AI-Powered Detection System:</strong><br><br>
+A real-time drowsiness detection system that:
 <ul>
-<li>Monitors driver's face using webcam (478 facial landmarks)</li>
-<li>Analyzes drowsiness patterns with Random Forest ML model</li>
-<li>Provides instant voice and visual alerts</li>
-<li>Achieves 99.51% accuracy at 30+ FPS</li>
+<li> Monitors driver's face using webcam</li>
+<li> Analyzes 478 facial landmarks with AI</li>
+<li> Provides instant alerts when drowsiness detected</li>
+<li> Uses voice warnings to wake the driver</li>
 </ul>
+</div>
 
-<h3>Key Capabilities</h3>
+<h3>Key Features</h3>
 
-<table>
-<thead>
+<table style="width:100%; border-collapse: separate; border-spacing: 0 10px;">
 <tr>
-<th>Component</th>
-<th>Technology</th>
-<th>Performance</th>
+<td style="width:50%; padding: 20px; background: #f9f9f9; border-left: 4px solid #495057; border-radius: 8px;">
+<h4 style="margin-top: 0;"> Computer Vision</h4>
+<ul style="margin-bottom: 0;">
+<li>MediaPipe Face Mesh (478 landmarks)</li>
+<li>Real-time face tracking</li>
+<li>Eye closure detection (EAR)</li>
+<li>Yawn detection (MAR)</li>
+<li>Head pose estimation</li>
+</ul>
+</td>
+<td style="width:50%; padding: 20px; background: #f9f9f9; border-left: 4px solid #495057; border-radius: 8px;">
+<h4 style="margin-top: 0;"> Machine Learning</h4>
+<ul style="margin-bottom: 0;">
+<li>6 algorithms compared</li>
+<li>Random Forest selected</li>
+<li>99.51% accuracy achieved</li>
+<li>Real-time classification</li>
+<li>Auto-calibration system</li>
+</ul>
+</td>
 </tr>
-</thead>
-<tbody>
 <tr>
-<td><strong>Computer Vision</strong></td>
-<td>MediaPipe Face Mesh, OpenCV</td>
-<td>478 landmarks @ 30 FPS</td>
+<td style="padding: 20px; background: #f9f9f9; border-left: 4px solid #495057; border-radius: 8px;">
+<h4 style="margin-top: 0;"> Alert System</h4>
+<ul style="margin-bottom: 0;">
+<li>Voice warnings (TTS)</li>
+<li>Visual indicators</li>
+<li>Smart timing (5s intervals)</li>
+<li>Multi-state detection</li>
+<li>Non-blocking alerts</li>
+</ul>
+</td>
+<td style="padding: 20px; background: #f9f9f9; border-left: 4px solid #495057; border-radius: 8px;">
+<h4 style="margin-top: 0;"> Performance</h4>
+<ul style="margin-bottom: 0;">
+<li>30+ FPS processing</li>
+<li>< 33ms latency</li>
+<li>Optimized algorithms</li>
+<li>Frame skipping</li>
+<li>Threading for audio</li>
+</ul>
+</td>
 </tr>
-<tr>
-<td><strong>Machine Learning</strong></td>
-<td>Random Forest (100 trees)</td>
-<td>99.51% accuracy</td>
-</tr>
-<tr>
-<td><strong>Alert System</strong></td>
-<td>Voice (TTS) + Visual overlay</td>
-<td>&lt;50ms latency</td>
-</tr>
-<tr>
-<td><strong>States Detected</strong></td>
-<td>Awake, Drowsy, Phone, Microsleep</td>
-<td>4-class classification</td>
-</tr>
-</tbody>
 </table>
 
 <hr>
@@ -438,98 +498,217 @@ max-width: 95%;
 <a id='2-system-architecture'></a>
 <h2>2. System Architecture</h2>
 
-<h3>6-Stage Data Pipeline</h3>
+<h3>End-to-End Data Pipeline</h3>
 
-<p>The system processes video input through an optimized pipeline that transforms raw frames into actionable alerts within 50ms.</p>
+<p>The system implements a robust real-time processing pipeline that transforms raw video input into actionable drowsiness alerts within milliseconds. Each stage is optimized for both accuracy and computational efficiency.</p>
 
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 2rem 1.5rem; margin: 2rem 0;">
-
-<div style="display: flex; flex-direction: column; gap: 1.5rem;">
-
-<!-- Stage 1 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">1</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">Input: Webcam Feed</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">720p @ 30 FPS from standard USB/built-in camera</p>
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 10px; padding: 2.5rem 2rem; margin: 2.5rem 0;">
+    
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- Stage 1: Input -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">1</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Input: Webcam Feed</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Resolution:</strong> 720p (1280×720) | <strong>Frame Rate:</strong> 30 FPS</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">Real-time video stream captured from standard USB/built-in webcam</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #666666; font-size: 2rem;">⬇</div>
+        
+        <!-- Stage 2: Preprocessing -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">2</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Preprocessing: MediaPipe Face Mesh</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Extracts:</strong> 468 3D facial landmarks (x, y, z coordinates)</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">Google's state-of-the-art face detection running on CPU @ ~25ms per frame</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #666666; font-size: 2rem;">⬇</div>
+        
+        <!-- Stage 3: Feature Engineering -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">3</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Feature Engineering: Vector Transformation</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Output:</strong> Flattened 1D feature vector (936 features)</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">468 landmarks × 2 coordinates (x, y) = 936-dimensional input for ML model</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #666666; font-size: 2rem;">⬇</div>
+        
+        <!-- Stage 4: Inference -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">4</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Inference: Random Forest Classifier</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Prediction:</strong> 4-class output (Awake, Drowsy, Phone, Microsleep)</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">Ensemble of 100 decision trees • Inference time: ~5ms • Accuracy: 99.51%</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #666666; font-size: 2rem;">⬇</div>
+        
+        <!-- Stage 5: Post-Processing -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">5</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Post-Processing: Temporal Smoothing</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Method:</strong> Rolling Average over 8-frame window</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">Reduces false positives by filtering out single-frame anomalies (266ms smoothing window)</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #666666; font-size: 2rem;">⬇</div>
+        
+        <!-- Stage 6: Output -->
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <div style="min-width: 60px; height: 60px; background: #000000; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">6</div>
+            <div style="flex: 1; background: #ffffff; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; color: #000000; font-size: 1.25rem; font-weight: 700;">Output: Multi-Modal Alert System</h4>
+                <p style="margin: 0; color: #000000; font-size: 1rem;"><strong>Visual:</strong> Bounding box overlay with state label | <strong>Audio:</strong> Alert beep (TTS engine)</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 0.95rem;">Real-time feedback displayed on video stream with non-blocking audio alerts</p>
+            </div>
+        </div>
+        
+    </div>
+    
 </div>
+
+<div style="background: #000000; color: #ffffff; border-radius: 8px; padding: 1.5rem 2rem; margin: 2rem 0;">
+    <p style="margin: 0; font-size: 1.125rem; text-align: center;"><strong>Total Pipeline Latency:</strong> &lt; 50ms end-to-end | <strong>Throughput:</strong> 25-30 FPS on standard CPU</p>
 </div>
 
-<div style="text-align: center; color: #cbd5e0; font-size: 1.5rem;">⬇</div>
+<h3>Visual Pipeline Overview</h3>
 
-<!-- Stage 2 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">2</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">Face Detection</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">MediaPipe extracts 468 3D facial landmarks (x, y, z) @ ~25ms per frame</p>
-</div>
-</div>
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 10px; padding: 3rem 2rem; margin: 2rem 0;">
 
-<div style="text-align: center; color: #cbd5e0; font-size: 1.5rem;">⬇</div>
-
-<!-- Stage 3 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">3</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">Feature Engineering</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">468 landmarks × 2 coords = 936-dimensional feature vector</p>
-</div>
+<div style="text-align: center; margin-bottom: 2.5rem;">
+    <div style="background: #ffffff; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2.5rem; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h4 style="margin: 0; color: #000000; font-size: 1.5rem; font-weight: 800;">VIDEO INPUT</h4>
+        <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 1.0625rem;">Webcam Stream</p>
+    </div>
 </div>
 
-<div style="text-align: center; color: #cbd5e0; font-size: 1.5rem;">⬇</div>
-
-<!-- Stage 4 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">4</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">ML Inference</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">Random Forest (100 trees) predicts 4 states • Inference: ~5ms • Accuracy: 99.51%</p>
-</div>
+<div style="text-align: center; margin: 1.5rem 0;">
+    <div style="font-size: 2rem; color: #666666;">⬇</div>
 </div>
 
-<div style="text-align: center; color: #cbd5e0; font-size: 1.5rem;">⬇</div>
-
-<!-- Stage 5 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">5</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">Temporal Smoothing</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">Rolling average over 8-frame window (266ms) reduces false positives</p>
-</div>
+<div style="text-align: center; margin-bottom: 2.5rem;">
+    <div style="background: #ffffff; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2.5rem; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h4 style="margin: 0; color: #000000; font-size: 1.5rem; font-weight: 800;">FACE DETECTION</h4>
+        <p style="margin: 0.5rem 0 0 0; color: #555555; font-size: 1.0625rem;">MediaPipe Face Mesh</p>
+        <p style="margin: 0.25rem 0 0 0; color: #666666; font-size: 0.9375rem;">478 Facial Landmarks (x, y)</p>
+    </div>
 </div>
 
-<div style="text-align: center; color: #cbd5e0; font-size: 1.5rem;">⬇</div>
-
-<!-- Stage 6 -->
-<div style="display: flex; align-items: center; gap: 1.25rem;">
-<div style="min-width: 50px; height: 50px; background: #667eea; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.375rem; font-weight: 800; box-shadow: 0 4px 8px rgba(0,0,0,0.15); flex-shrink: 0;">6</div>
-<div style="flex: 1; background: #ffffff; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-<h4 style="margin: 0 0 0.375rem 0; color: #1a202c; font-size: 1.125rem; font-weight: 700;">Multi-Modal Alerts</h4>
-<p style="margin: 0; color: #4b5563; font-size: 0.9375rem;">Visual overlay + Audio beep (non-blocking) displayed in real-time</p>
-</div>
+<div style="text-align: center; margin: 1.5rem 0;">
+    <div style="font-size: 2rem; color: #666666;">⬇</div>
 </div>
 
+<div style="text-align: center; margin-bottom: 2.5rem;">
+    <div style="background: #ffffff; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2.5rem; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 650px;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.5rem; font-weight: 800;">FEATURE EXTRACTION</h4>
+        <div style="text-align: left; display: inline-block;">
+            <p style="margin: 0.5rem 0; color: #000000; font-size: 1.0625rem;"><strong>• EAR</strong> - Eye Aspect Ratio</p>
+            <p style="margin: 0.5rem 0; color: #000000; font-size: 1.0625rem;"><strong>• MAR</strong> - Mouth Aspect Ratio</p>
+            <p style="margin: 0.5rem 0; color: #000000; font-size: 1.0625rem;"><strong>• Head Pose</strong> - Pitch, Yaw, Roll</p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin: 1.5rem 0;">
+    <div style="font-size: 2rem; color: #666666;">⬇</div>
+</div>
+
+<div style="text-align: center; margin-bottom: 2.5rem;">
+    <div style="background: #ffffff; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2.5rem; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 700px;">
+        <h4 style="margin: 0 0 0.75rem 0; color: #000000; font-size: 1.5rem; font-weight: 800;">ML CLASSIFICATION</h4>
+        <p style="margin: 0.5rem 0; color: #555555; font-size: 1.0625rem;">Random Forest Model</p>
+        <p style="margin: 0.75rem 0 0 0; color: #000000; font-size: 1.0625rem;">
+            <strong>4 States:</strong> Awake • Drowsy • Looking Down (Phone) • Microsleep
+        </p>
+    </div>
+</div>
+
+<div style="text-align: center; margin: 1.5rem 0;">
+    <div style="font-size: 2rem; color: #666666;">⬇</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2.5rem 0;">
+    <div style="text-align: center;">
+        <div style="background: #f9f9f9; border: 3px solid #555555; border-radius: 8px; padding: 1.25rem 1.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h4 style="margin: 0; color: #000000; font-size: 1.375rem; font-weight: 800;">DROWSY DETECTED?</h4>
+        </div>
+        <div style="margin: 1rem 0; font-size: 2rem; color: #666666;">⬇</div>
+        <div style="background: #000000; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h4 style="margin: 0 0 0.75rem 0; color: #ffffff; font-size: 1.375rem; font-weight: 800;">ALERT SYSTEM</h4>
+            <p style="margin: 0.5rem 0; color: #dddddd; font-size: 1rem;">Voice Warning</p>
+            <p style="margin: 0.5rem 0; color: #dddddd; font-size: 1rem;">Visual Alert</p>
+        </div>
+    </div>
+    
+    <div style="text-align: center;">
+        <div style="background: #f9f9f9; border: 3px solid #555555; border-radius: 8px; padding: 1.25rem 1.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h4 style="margin: 0; color: #000000; font-size: 1.375rem; font-weight: 800;">AWAKE & ALERT?</h4>
+        </div>
+        <div style="margin: 1rem 0; font-size: 2rem; color: #666666;">⬇</div>
+        <div style="background: #000000; border: 3px solid #000000; border-radius: 8px; padding: 1.5rem 2rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h4 style="margin: 0 0 0.75rem 0; color: #ffffff; font-size: 1.375rem; font-weight: 800;">CONTINUE</h4>
+            <p style="margin: 0.5rem 0; color: #dddddd; font-size: 1rem;">Normal Monitoring</p>
+        </div>
+    </div>
 </div>
 
 </div>
 
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; border-radius: 8px; padding: 1.25rem 1.75rem; margin: 2rem 0; text-align: center;">
-<p style="margin: 0; font-size: 1.0625rem; color: #ffffff;"><strong>Total Pipeline Latency:</strong> &lt; 50ms end-to-end | <strong>Throughput:</strong> 25-30 FPS on standard CPU</p>
+<h3>Technology Stack</h3>
+
+<div class="stats-grid">
+
+<div style="padding: 15px; background: #f9f9f9; border: 1px solid #dddddd; border-radius: 8px;">
+<h4 style="margin-top: 0; color: #212529;">Computer Vision</h4>
+<ul style="margin: 0; font-size: 14px;">
+<li>OpenCV 4.8</li>
+<li>MediaPipe 0.10.9</li>
+<li>NumPy arrays</li>
+</ul>
+</div>
+
+<div style="padding: 15px; background: #f9f9f9; border: 1px solid #dddddd; border-radius: 8px;">
+<h4 style="margin-top: 0; color: #212529;">Machine Learning</h4>
+<ul style="margin: 0; font-size: 14px;">
+<li>scikit-learn 1.3</li>
+<li>XGBoost 2.0</li>
+<li>Random Forest</li>
+</ul>
+</div>
+
+<div style="padding: 15px; background: #f9f9f9; border: 1px solid #dddddd; border-radius: 8px;">
+<h4 style="margin-top: 0; color: #212529;">Data & Analysis</h4>
+<ul style="margin: 0; font-size: 14px;">
+<li>pandas 2.0</li>
+<li>matplotlib 3.7</li>
+<li>seaborn 0.12</li>
+</ul>
+</div>
+
 </div>
 
 <h3>Detected States</h3>
 
 <table>
-<thead>
 <tr>
 <th>State</th>
 <th>Description</th>
 <th>Features</th>
 <th>Alert Level</th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td><strong>Awake</strong></td>
 <td>Alert and attentive</td>
@@ -554,295 +733,1553 @@ max-width: 95%;
 <td>Very low EAR, head tilt</td>
 <td>Critical</td>
 </tr>
-</tbody>
 </table>
 
 <hr>
 
-<a id='3-model-evaluation'></a>
-<h2>3. Model Evaluation & Results</h2>
+<a id='3-setup-installation'></a>
+<h2>3. Setup & Installation</h2>
+
+<h3>Install Dependencies</h3>
+
+<pre><code># Install required packages (run once)
+# !pip install -r requirements.txt
+
+# Import all libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)
+
+# ML libraries
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import (
+ classification_report, confusion_matrix, 
+ accuracy_score, precision_score, recall_score, f1_score,
+ roc_curve, auc, RocCurveDisplay
+)
+
+# ML Algorithms
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
+
+import joblib
+import time
+from pathlib import Path
+
+# Visualization settings
+plt.style.use(&#x27;seaborn-v0_8-whitegrid&#x27;)
+sns.set_palette(&quot;husl&quot;)
+plt.rcParams[&#x27;figure.figsize&#x27;] = (14, 6)
+plt.rcParams[&#x27;font.size&#x27;] = 11
+plt.rcParams[&#x27;axes.titlesize&#x27;] = 14
+plt.rcParams[&#x27;axes.titleweight&#x27;] = &#x27;bold&#x27;
+plt.rcParams[&#x27;figure.dpi&#x27;] = 100
+
+print(&quot; All libraries imported successfully!&quot;)
+print(f&quot;\n Package Versions:&quot;)
+print(f&quot; NumPy: {np.__version__}&quot;)
+print(f&quot; Pandas: {pd.__version__}&quot;)
+print(f&quot; Matplotlib: {plt.matplotlib.__version__}&quot;)
+print(f&quot; Seaborn: {sns.__version__}&quot;)
+print(f&quot; scikit-learn: (installed)&quot;)
+print(f&quot; XGBoost: (installed)&quot;)</code></pre>
+
+<h1> Machine Learning Algorithm Comparison</h1>
+<h2>Driver Monitoring System - Drowsiness Detection</h2>
+
+<hr>
+
+<h2> Objective</h2>
+<p>This notebook compares <strong>6 popular Machine Learning algorithms</strong> for driver state detection:</p>
+<ol>
+<li><strong>Logistic Regression</strong></li>
+<li><strong>SVM (Linear)</strong> - Support Vector Machine with linear kernel</li>
+<li><strong>SVM (RBF)</strong> - Support Vector Machine with RBF kernel</li>
+<li><strong>Random Forest</strong></li>
+<li><strong>XGBoost</strong> - Extreme Gradient Boosting</li>
+<li><strong>K-Nearest Neighbors (KNN)</strong></li>
+</ol>
+
+<hr>
+
+<h2> Contents</h2>
+<ul>
+<li>Load and explore data from <code>face_data.csv</code></li>
+<li>Data preprocessing: standardization, train/test split</li>
+<li>Train each model with GridSearchCV</li>
+<li>Detailed evaluation: Confusion Matrix, Classification Report</li>
+<li>Compare performance across all models</li>
+<li>Conclusions and recommendations</li>
+</ul>
+
+<hr>
+
+<h2> How to Use</h2>
+<ol>
+<li>Run each cell in order from top to bottom</li>
+<li>Ensure <code>face_data.csv</code> exists in the working directory</li>
+<li>Each model is trained and evaluated independently</li>
+<li>Final comparison table will be displayed at the end</li>
+</ol>
+
+<hr>
+
+<h2> Step 1: Import Libraries</h2>
+
+<p>Import all necessary libraries:</p>
+<ul>
+<li><strong>pandas, numpy</strong>: Data manipulation</li>
+<li><strong>matplotlib, seaborn</strong>: Visualization</li>
+<li><strong>sklearn</strong>: ML algorithms and evaluation tools</li>
+<li><strong>xgboost</strong>: XGBoost algorithm</li>
+</ul>
+
+<pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)
+
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import (classification_report, confusion_matrix, 
+ accuracy_score, precision_score, recall_score, f1_score)
+
+# ML Algorithms
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
+
+import joblib
+from pathlib import Path
+
+# Configure matplotlib
+plt.style.use(&#x27;seaborn-v0_8-darkgrid&#x27;)
+sns.set_palette(&quot;husl&quot;)
+
+print(&quot;[OK] Successfully imported all libraries!&quot;)
+print(f&quot;Pandas version: {pd.__version__}&quot;)</code></pre>
+
+<h2> Step 2: Load Data</h2>
+
+<p>Data collected from <code>face_data.csv</code> contains:</p>
+<ul>
+<li><strong>478 landmarks</strong> from MediaPipe Face Mesh (each landmark has x, y coordinates)</li>
+<li><strong>4 classes</strong>:</li>
+ - 0: Awake
+ - 1: Drowsy
+ - 2: Looking Down (Phone)
+ - 3: Microsleep
+</ul>
+
+<pre><code># Load data
+DATA_FILE = &quot;face_data.csv&quot;
+df = pd.read_csv(DATA_FILE)
+
+print(f&quot;[OK] Loaded data from {DATA_FILE}&quot;)
+print(f&quot;Shape: {df.shape}&quot;)
+print(f&quot;Number of samples: {len(df)}&quot;)
+print(f&quot;Number of features: {df.shape[1] - 1} (478 landmarks * 2 = 956 features)&quot;)
+
+# Display data distribution by class
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;DATA DISTRIBUTION BY CLASS&quot;)
+print(&quot;=&quot;*70)
+class_names = {0: &quot;Awake&quot;, 1: &quot;Drowsy&quot;, 2: &quot;Looking Down&quot;, 3: &quot;Microsleep&quot;}
+for label, count in df[&#x27;label&#x27;].value_counts().sort_index().items():
+ print(f&quot;Class {label} ({class_names[label]}): {count} samples ({count/len(df)*100:.1f}%)&quot;)
+
+# Display first 5 rows
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;FIRST 5 ROWS&quot;)
+print(&quot;=&quot;*70)
+df.head()</code></pre>
+
+<hr>
+<div class="section-divider">
+ <h1>Machine Learning Models</h1>
+ <h2>Complete Training and Comparison</h2>
+ <p>6 Algorithms | GridSearchCV | Performance Analysis</p>
+</div>
+
+<h1> Machine Learning Algorithm Comparison</h1>
+<h2>Driver Monitoring System - Drowsiness Detection</h2>
+
+<hr>
+
+<h2> Objective</h2>
+<p>This notebook compares <strong>6 popular Machine Learning algorithms</strong> for driver state detection:</p>
+<ol>
+<li><strong>Logistic Regression</strong></li>
+<li><strong>SVM (Linear)</strong> - Support Vector Machine with linear kernel</li>
+<li><strong>SVM (RBF)</strong> - Support Vector Machine with RBF kernel</li>
+<li><strong>Random Forest</strong></li>
+<li><strong>XGBoost</strong> - Extreme Gradient Boosting</li>
+<li><strong>K-Nearest Neighbors (KNN)</strong></li>
+</ol>
+
+<hr>
+
+<h2> Contents</h2>
+<ul>
+<li>Load and explore data from <code>face_data.csv</code></li>
+<li>Data preprocessing: standardization, train/test split</li>
+<li>Train each model with GridSearchCV</li>
+<li>Detailed evaluation: Confusion Matrix, Classification Report</li>
+<li>Compare performance across all models</li>
+<li>Conclusions and recommendations</li>
+</ul>
+
+<hr>
+
+<h2> How to Use</h2>
+<ol>
+<li>Run each cell in order from top to bottom</li>
+<li>Ensure <code>face_data.csv</code> exists in the working directory</li>
+<li>Each model is trained and evaluated independently</li>
+<li>Final comparison table will be displayed at the end</li>
+</ol>
+
+<hr>
+
+<h2> Step 1: Import Libraries</h2>
+
+<p>Import all necessary libraries:</p>
+<ul>
+<li><strong>pandas, numpy</strong>: Data manipulation</li>
+<li><strong>matplotlib, seaborn</strong>: Visualization</li>
+<li><strong>sklearn</strong>: ML algorithms and evaluation tools</li>
+<li><strong>xgboost</strong>: XGBoost algorithm</li>
+</ul>
+
+<pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)
+
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import (classification_report, confusion_matrix, 
+ accuracy_score, precision_score, recall_score, f1_score)
+
+# ML Algorithms
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
+
+import joblib
+from pathlib import Path
+
+# Configure matplotlib
+plt.style.use(&#x27;seaborn-v0_8-darkgrid&#x27;)
+sns.set_palette(&quot;husl&quot;)
+
+print(&quot;[OK] Successfully imported all libraries!&quot;)
+print(f&quot;Pandas version: {pd.__version__}&quot;)</code></pre>
+
+<h2> Step 2: Load Data</h2>
+
+<p>Data collected from <code>face_data.csv</code> contains:</p>
+<ul>
+<li><strong>478 landmarks</strong> from MediaPipe Face Mesh (each landmark has x, y coordinates)</li>
+<li><strong>4 classes</strong>:</li>
+ - 0: Awake
+ - 1: Drowsy
+ - 2: Looking Down (Phone)
+ - 3: Microsleep
+</ul>
+
+<pre><code># Load data
+DATA_FILE = &quot;face_data.csv&quot;
+df = pd.read_csv(DATA_FILE)
+
+print(f&quot;[OK] Loaded data from {DATA_FILE}&quot;)
+print(f&quot;Shape: {df.shape}&quot;)
+print(f&quot;Number of samples: {len(df)}&quot;)
+print(f&quot;Number of features: {df.shape[1] - 1} (478 landmarks * 2 = 956 features)&quot;)
+
+# Display data distribution by class
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;DATA DISTRIBUTION BY CLASS&quot;)
+print(&quot;=&quot;*70)
+class_names = {0: &quot;Awake&quot;, 1: &quot;Drowsy&quot;, 2: &quot;Looking Down&quot;, 3: &quot;Microsleep&quot;}
+for label, count in df[&#x27;label&#x27;].value_counts().sort_index().items():
+ print(f&quot;Class {label} ({class_names[label]}): {count} samples ({count/len(df)*100:.1f}%)&quot;)
+
+# Display first 5 rows
+print(&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;FIRST 5 ROWS&quot;)
+print(&quot;=&quot;*70)
+df.head()</code></pre>
+
+<h2> Step 3: Data Visualization</h2>
+
+<p>Visualize class distribution to better understand the data</p>
+
+<pre><code># Plot class distribution
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Bar chart
+class_counts = df[&#x27;label&#x27;].value_counts().sort_index()
+colors = [&#x27;#2ecc71&#x27;, &#x27;#e74c3c&#x27;, &#x27;#f39c12&#x27;, &#x27;#9b59b6&#x27;]
+axes[0].bar([class_names[i] for i in class_counts.index], class_counts.values, color=colors)
+axes[0].set_title(&#x27;Sample Distribution by Class&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+axes[0].set_xlabel(&#x27;Classes&#x27;)
+axes[0].set_ylabel(&#x27;Number of Samples&#x27;)
+axes[0].grid(axis=&#x27;y&#x27;, alpha=0.3)
+
+# Add values on bars
+for i, v in enumerate(class_counts.values):
+ axes[0].text(i, v + 20, str(v), ha=&#x27;center&#x27;, fontweight=&#x27;bold&#x27;)
+
+# Pie chart
+axes[1].pie(class_counts.values, labels=[class_names[i] for i in class_counts.index], 
+ autopct=&#x27;%1.1f%%&#x27;, colors=colors, startangle=90)
+axes[1].set_title(&#x27;Class Distribution Percentage&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+
+plt.tight_layout()
+plt.show()
+
+print(&quot;[OK] Data is fairly balanced across classes!&quot;)</code></pre>
+
+<h2> Step 4: Data Preprocessing</h2>
+
+<p>Preprocessing steps:</p>
+<ol>
+<li><strong>Separate features and target</strong>: X (features) and y (labels)</li>
+<li><strong>Train/test split</strong>: 80% train, 20% test with stratify to preserve class ratios</li>
+<li><strong>Standardization</strong>: Use StandardScaler to scale features to mean=0, std=1</li>
+</ol>
+
+<p><strong>Why standardization?</strong></p>
+<ul>
+<li>Algorithms like SVM, KNN, Logistic Regression are sensitive to feature scales</li>
+<li>Helps models converge faster and achieve better performance</li>
+</ul>
+
+<pre><code># Separate features and labels
+X = df.drop(&#x27;label&#x27;, axis=1)
+y = df[&#x27;label&#x27;]
+
+print(f&quot;X shape: {X.shape}&quot;)
+print(f&quot;y shape: {y.shape}&quot;)
+
+# Train/test split (80/20)
+X_train, X_test, y_train, y_test = train_test_split(
+ X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+print(f&quot;\n[OK] Train/test split:&quot;)
+print(f&quot; Training set: {X_train.shape[0]} samples ({X_train.shape[0]/len(df)*100:.1f}%)&quot;)
+print(f&quot; Test set: {X_test.shape[0]} samples ({X_test.shape[0]/len(df)*100:.1f}%)&quot;)
+
+# Standardize data
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+print(f&quot;\n[OK] Data standardized (StandardScaler)&quot;)
+print(f&quot; Mean of X_train_scaled: {X_train_scaled.mean():.6f}&quot;)
+print(f&quot; Std of X_train_scaled: {X_train_scaled.std():.6f}&quot;)
+
+# Save scaler for later use
+joblib.dump(scaler, &#x27;scaler.pkl&#x27;)
+print(f&quot;\n[OK] Saved scaler to scaler.pkl&quot;)</code></pre>
+
+<hr>
+<h1> PART 2: TRAIN AND EVALUATE ALGORITHMS</h1>
+<hr>
+
+<h2>1⃣ Logistic Regression</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>Logistic Regression</strong> is a basic classification algorithm that uses the sigmoid function to predict probabilities.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Simple, easy to understand and interpret</li>
+<li>Fast training</li>
+<li>Effective with linearly separable data</li>
+<li>Provides probability predictions</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Not good with non-linear data</li>
+<li>Assumes feature independence</li>
+</ul>
+
+<p><strong>Hyperparameters to tune:</strong></p>
+<ul>
+<li><code>C</code>: Regularization strength (smaller = stronger regularization)</li>
+<li><code>penalty</code>: L1 or L2 regularization</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;1⃣ LOGISTIC REGRESSION&quot;)
+print(&quot;=&quot;*70)
+
+# Define model
+lr = LogisticRegression(max_iter=2000, random_state=42)
+
+# GridSearchCV to find best hyperparameters
+param_grid_lr = {
+ &#x27;C&#x27;: [0.01, 0.1, 1, 10, 100],
+ &#x27;penalty&#x27;: [&#x27;l1&#x27;, &#x27;l2&#x27;],
+ &#x27;solver&#x27;: [&#x27;liblinear&#x27;] # liblinear supports l1 and l2
+}
+
+grid_lr = GridSearchCV(lr, param_grid_lr, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training Logistic Regression with GridSearchCV...&quot;)
+grid_lr.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_lr.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_lr.best_score_:.4f}&quot;)
+
+# Predict on test set
+y_pred_lr = grid_lr.predict(X_test_scaled)
+
+# Evaluation
+acc_lr = accuracy_score(y_test, y_pred_lr)
+prec_lr = precision_score(y_test, y_pred_lr, average=&#x27;macro&#x27;)
+rec_lr = recall_score(y_test, y_pred_lr, average=&#x27;macro&#x27;)
+f1_lr = f1_score(y_test, y_pred_lr, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_lr:.4f} ({acc_lr*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_lr:.4f}&quot;)
+print(f&quot;Recall: {rec_lr:.4f}&quot;)
+print(f&quot;F1-Score: {f1_lr:.4f}&quot;)
+
+# Classification Report
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_lr, target_names=[class_names[i] for i in range(4)]))
+
+# Confusion Matrix
+cm_lr = confusion_matrix(y_test, y_pred_lr)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_lr, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Blues&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - Logistic Regression&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+# Save model
+joblib.dump(grid_lr.best_estimator_, &#x27;model_logistic_regression.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_logistic_regression.pkl&quot;)</code></pre>
+
+<h2>2⃣ SVM Linear (Support Vector Machine - Linear Kernel)</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>SVM</strong> finds the optimal hyperplane to separate classes with maximum margin.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Effective with high-dimensional data</li>
+<li>Robust to outliers</li>
+<li>Linear kernel is fast and stable</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Slow training with large datasets</li>
+<li>Sensitive to hyperparameters</li>
+<li>Hard to interpret</li>
+</ul>
+
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><code>C</code>: Trade-off between margin and classification errors</li>
+<li><code>kernel='linear'</code>: Suitable for linearly separable data</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;2⃣ SVM LINEAR&quot;)
+print(&quot;=&quot;*70)
+
+# Define model
+svm_linear = SVC(kernel=&#x27;linear&#x27;, random_state=42)
+
+# GridSearchCV
+param_grid_svm_linear = {
+ &#x27;C&#x27;: [0.01, 0.1, 1, 10, 100]
+}
+
+grid_svm_linear = GridSearchCV(svm_linear, param_grid_svm_linear, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training SVM Linear with GridSearchCV...&quot;)
+grid_svm_linear.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_svm_linear.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_svm_linear.best_score_:.4f}&quot;)
+
+# Prediction
+y_pred_svm_linear = grid_svm_linear.predict(X_test_scaled)
+
+# Evaluation
+acc_svm_linear = accuracy_score(y_test, y_pred_svm_linear)
+prec_svm_linear = precision_score(y_test, y_pred_svm_linear, average=&#x27;macro&#x27;)
+rec_svm_linear = recall_score(y_test, y_pred_svm_linear, average=&#x27;macro&#x27;)
+f1_svm_linear = f1_score(y_test, y_pred_svm_linear, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_svm_linear:.4f} ({acc_svm_linear*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_svm_linear:.4f}&quot;)
+print(f&quot;Recall: {rec_svm_linear:.4f}&quot;)
+print(f&quot;F1-Score: {f1_svm_linear:.4f}&quot;)
+
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_svm_linear, target_names=[class_names[i] for i in range(4)]))
+
+# Confusion Matrix
+cm_svm_linear = confusion_matrix(y_test, y_pred_svm_linear)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_svm_linear, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Greens&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - SVM Linear&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+# Save model
+joblib.dump(grid_svm_linear.best_estimator_, &#x27;model_svm_linear.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_svm_linear.pkl&quot;)</code></pre>
+
+<h2>3⃣ SVM RBF (Support Vector Machine - RBF Kernel)</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>SVM with RBF kernel</strong> can handle non-linear data by mapping to higher-dimensional space.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Handles complex non-linear data</li>
+<li>Flexible with gamma and C parameters</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Very slow training</li>
+<li>Easy to overfit if gamma is too large</li>
+<li>Requires careful standardization</li>
+</ul>
+
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><code>C</code>: Regularization parameter</li>
+<li><code>gamma</code>: Defines influence of a single training sample</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;3⃣ SVM RBF&quot;)
+print(&quot;=&quot;*70)
+
+svm_rbf = SVC(kernel=&#x27;rbf&#x27;, random_state=42)
+
+param_grid_svm_rbf = {
+ &#x27;C&#x27;: [0.1, 1, 10, 100],
+ &#x27;gamma&#x27;: [&#x27;scale&#x27;, 0.001, 0.01, 0.1]
+}
+
+grid_svm_rbf = GridSearchCV(svm_rbf, param_grid_svm_rbf, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training SVM RBF with GridSearchCV (may take a few minutes)...&quot;)
+grid_svm_rbf.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_svm_rbf.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_svm_rbf.best_score_:.4f}&quot;)
+
+y_pred_svm_rbf = grid_svm_rbf.predict(X_test_scaled)
+
+acc_svm_rbf = accuracy_score(y_test, y_pred_svm_rbf)
+prec_svm_rbf = precision_score(y_test, y_pred_svm_rbf, average=&#x27;macro&#x27;)
+rec_svm_rbf = recall_score(y_test, y_pred_svm_rbf, average=&#x27;macro&#x27;)
+f1_svm_rbf = f1_score(y_test, y_pred_svm_rbf, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_svm_rbf:.4f} ({acc_svm_rbf*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_svm_rbf:.4f}&quot;)
+print(f&quot;Recall: {rec_svm_rbf:.4f}&quot;)
+print(f&quot;F1-Score: {f1_svm_rbf:.4f}&quot;)
+
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_svm_rbf, target_names=[class_names[i] for i in range(4)]))
+
+cm_svm_rbf = confusion_matrix(y_test, y_pred_svm_rbf)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_svm_rbf, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Oranges&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - SVM RBF&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+joblib.dump(grid_svm_rbf.best_estimator_, &#x27;model_svm_rbf.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_svm_rbf.pkl&quot;)</code></pre>
+
+<h2>4⃣ Random Forest</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>Random Forest</strong> is an ensemble method that combines multiple decision trees and uses voting for final prediction.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>High performance, robust</li>
+<li>Handles non-linear data well</li>
+<li>Less prone to overfitting</li>
+<li>Provides feature importance</li>
+<li>No need for data standardization</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Large model size, harder to deploy</li>
+<li>Slower training with many trees</li>
+</ul>
+
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><code>n_estimators</code>: Number of trees</li>
+<li><code>max_depth</code>: Maximum depth of each tree</li>
+<li><code>min_samples_split</code>: Minimum samples required to split a node</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;4⃣ RANDOM FOREST&quot;)
+print(&quot;=&quot;*70)
+
+rf = RandomForestClassifier(random_state=42)
+
+param_grid_rf = {
+ &#x27;n_estimators&#x27;: [50, 100, 200],
+ &#x27;max_depth&#x27;: [10, 20, 30, None],
+ &#x27;min_samples_split&#x27;: [2, 5, 10]
+}
+
+grid_rf = GridSearchCV(rf, param_grid_rf, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training Random Forest with GridSearchCV...&quot;)
+grid_rf.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_rf.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_rf.best_score_:.4f}&quot;)
+
+y_pred_rf = grid_rf.predict(X_test_scaled)
+
+acc_rf = accuracy_score(y_test, y_pred_rf)
+prec_rf = precision_score(y_test, y_pred_rf, average=&#x27;macro&#x27;)
+rec_rf = recall_score(y_test, y_pred_rf, average=&#x27;macro&#x27;)
+f1_rf = f1_score(y_test, y_pred_rf, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_rf:.4f} ({acc_rf*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_rf:.4f}&quot;)
+print(f&quot;Recall: {rec_rf:.4f}&quot;)
+print(f&quot;F1-Score: {f1_rf:.4f}&quot;)
+
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_rf, target_names=[class_names[i] for i in range(4)]))
+
+cm_rf = confusion_matrix(y_test, y_pred_rf)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_rf, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Purples&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - Random Forest&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+joblib.dump(grid_rf.best_estimator_, &#x27;model_random_forest.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_random_forest.pkl&quot;)</code></pre>
+
+<h2>5⃣ XGBoost (Extreme Gradient Boosting)</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>XGBoost</strong> is a powerful boosting algorithm that trains weak learners sequentially to improve on previous learners' errors.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Very high performance, often wins Kaggle competitions</li>
+<li>Handles complex non-linear data well</li>
+<li>Built-in regularization (prevents overfitting)</li>
+<li>Supports parallel processing</li>
+<li>Provides feature importance</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Many complex hyperparameters</li>
+<li>Easy to overfit if not tuned carefully</li>
+<li>Slower training than Random Forest</li>
+</ul>
+
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><code>n_estimators</code>: Number of boosting rounds</li>
+<li><code>max_depth</code>: Depth of trees</li>
+<li><code>learning_rate</code>: Learning rate</li>
+<li><code>subsample</code>: Fraction of samples for each tree</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;5⃣ XGBOOST&quot;)
+print(&quot;=&quot;*70)
+
+xgb = XGBClassifier(random_state=42, eval_metric=&#x27;mlogloss&#x27;)
+
+param_grid_xgb = {
+ &#x27;n_estimators&#x27;: [100, 200],
+ &#x27;max_depth&#x27;: [3, 5, 7],
+ &#x27;learning_rate&#x27;: [0.01, 0.1, 0.3],
+ &#x27;subsample&#x27;: [0.8, 1.0]
+}
+
+grid_xgb = GridSearchCV(xgb, param_grid_xgb, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training XGBoost with GridSearchCV...&quot;)
+grid_xgb.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_xgb.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_xgb.best_score_:.4f}&quot;)
+
+y_pred_xgb = grid_xgb.predict(X_test_scaled)
+
+acc_xgb = accuracy_score(y_test, y_pred_xgb)
+prec_xgb = precision_score(y_test, y_pred_xgb, average=&#x27;macro&#x27;)
+rec_xgb = recall_score(y_test, y_pred_xgb, average=&#x27;macro&#x27;)
+f1_xgb = f1_score(y_test, y_pred_xgb, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_xgb:.4f} ({acc_xgb*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_xgb:.4f}&quot;)
+print(f&quot;Recall: {rec_xgb:.4f}&quot;)
+print(f&quot;F1-Score: {f1_xgb:.4f}&quot;)
+
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_xgb, target_names=[class_names[i] for i in range(4)]))
+
+cm_xgb = confusion_matrix(y_test, y_pred_xgb)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_xgb, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Reds&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - XGBoost&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+joblib.dump(grid_xgb.best_estimator_, &#x27;model_xgboost.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_xgboost.pkl&quot;)</code></pre>
+
+<h2>6⃣ K-Nearest Neighbors (KNN)</h2>
+
+<h3> Algorithm Explanation</h3>
+<p><strong>KNN</strong> is a lazy learning algorithm that classifies based on the K nearest neighbors in feature space.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Simple, easy to understand</li>
+<li>No training required (lazy learning)</li>
+<li>Effective with small datasets</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Slow prediction (must compute distance to all training samples)</li>
+<li>Sensitive to feature scales (requires standardization)</li>
+<li>Not effective with high-dimensional data (curse of dimensionality)</li>
+<li>Sensitive to outliers</li>
+</ul>
+
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><code>n_neighbors</code>: Number of neighbors (K)</li>
+<li><code>weights</code>: 'uniform' (all equal) or 'distance' (closer = higher weight)</li>
+<li><code>metric</code>: Distance metric (euclidean, manhattan, etc.)</li>
+</ul>
+
+<pre><code>print(&quot;=&quot;*70)
+print(&quot;6⃣ KNN&quot;)
+print(&quot;=&quot;*70)
+
+knn = KNeighborsClassifier()
+
+param_grid_knn = {
+ &#x27;n_neighbors&#x27;: [3, 5, 7, 9, 11],
+ &#x27;weights&#x27;: [&#x27;uniform&#x27;, &#x27;distance&#x27;],
+ &#x27;metric&#x27;: [&#x27;euclidean&#x27;, &#x27;manhattan&#x27;]
+}
+
+grid_knn = GridSearchCV(knn, param_grid_knn, cv=5, scoring=&#x27;f1_macro&#x27;, n_jobs=-1, verbose=1)
+
+print(&quot;\n[TRAINING] Training KNN with GridSearchCV...&quot;)
+grid_knn.fit(X_train_scaled, y_train)
+
+print(f&quot;\n[OK] Best parameters: {grid_knn.best_params_}&quot;)
+print(f&quot;[OK] Best CV F1-score: {grid_knn.best_score_:.4f}&quot;)
+
+y_pred_knn = grid_knn.predict(X_test_scaled)
+
+acc_knn = accuracy_score(y_test, y_pred_knn)
+prec_knn = precision_score(y_test, y_pred_knn, average=&#x27;macro&#x27;)
+rec_knn = recall_score(y_test, y_pred_knn, average=&#x27;macro&#x27;)
+f1_knn = f1_score(y_test, y_pred_knn, average=&#x27;macro&#x27;)
+
+print(f&quot;\n&quot; + &quot;=&quot;*70)
+print(&quot;RESULTS ON TEST SET&quot;)
+print(&quot;=&quot;*70)
+print(f&quot;Accuracy: {acc_knn:.4f} ({acc_knn*100:.2f}%)&quot;)
+print(f&quot;Precision: {prec_knn:.4f}&quot;)
+print(f&quot;Recall: {rec_knn:.4f}&quot;)
+print(f&quot;F1-Score: {f1_knn:.4f}&quot;)
+
+print(f&quot;\n&quot; + &quot;-&quot;*70)
+print(&quot;CLASSIFICATION REPORT&quot;)
+print(&quot;-&quot;*70)
+print(classification_report(y_test, y_pred_knn, target_names=[class_names[i] for i in range(4)]))
+
+cm_knn = confusion_matrix(y_test, y_pred_knn)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm_knn, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;YlOrBr&#x27;, 
+ xticklabels=[class_names[i] for i in range(4)],
+ yticklabels=[class_names[i] for i in range(4)])
+plt.title(&#x27;Confusion Matrix - KNN&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+plt.ylabel(&#x27;True Label&#x27;)
+plt.xlabel(&#x27;Predicted Label&#x27;)
+plt.tight_layout()
+plt.show()
+
+joblib.dump(grid_knn.best_estimator_, &#x27;model_knn.pkl&#x27;)
+print(&quot;\n[OK] Saved model to model_knn.pkl&quot;)</code></pre>
+
+<hr>
+<h1> PART 3: COMPREHENSIVE COMPARISON</h1>
+<hr>
+
+<h2>Summary Table</h2>
+
+<p>Compare performance of all 6 algorithms on the test set</p>
+
+<pre><code># Create comparison table
+results_comparison = pd.DataFrame({
+ &#x27;Model&#x27;: [&#x27;Logistic Regression&#x27;, &#x27;SVM Linear&#x27;, &#x27;SVM RBF&#x27;, &#x27;Random Forest&#x27;, &#x27;XGBoost&#x27;, &#x27;KNN&#x27;],
+ &#x27;Accuracy&#x27;: [acc_lr, acc_svm_linear, acc_svm_rbf, acc_rf, acc_xgb, acc_knn],
+ &#x27;Precision&#x27;: [prec_lr, prec_svm_linear, prec_svm_rbf, prec_rf, prec_xgb, prec_knn],
+ &#x27;Recall&#x27;: [rec_lr, rec_svm_linear, rec_svm_rbf, rec_rf, rec_xgb, rec_knn],
+ &#x27;F1-Score&#x27;: [f1_lr, f1_svm_linear, f1_svm_rbf, f1_rf, f1_xgb, f1_knn]
+})
+
+# Sort by F1-Score
+results_comparison = results_comparison.sort_values(&#x27;F1-Score&#x27;, ascending=False).reset_index(drop=True)
+
+print(&quot;=&quot;*80)
+print(&quot;COMPREHENSIVE COMPARISON - SORTED BY F1-SCORE&quot;)
+print(&quot;=&quot;*80)
+print(results_comparison.to_string(index=False))
+print(&quot;=&quot;*80)
+
+# Find best model
+best_model_name = results_comparison.iloc[0][&#x27;Model&#x27;]
+best_f1 = results_comparison.iloc[0][&#x27;F1-Score&#x27;]
+print(f&quot;\nBEST MODEL: {best_model_name} (F1-Score: {best_f1:.4f})&quot;)
+
+# Display styled table
+results_comparison_styled = results_comparison.style.background_gradient(cmap=&#x27;RdYlGn&#x27;, subset=[&#x27;Accuracy&#x27;, &#x27;Precision&#x27;, &#x27;Recall&#x27;, &#x27;F1-Score&#x27;])
+results_comparison_styled</code></pre>
+
+<h2>Comparison Charts</h2>
+
+<pre><code># Plot bar charts comparing all metrics
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+metrics = [&#x27;Accuracy&#x27;, &#x27;Precision&#x27;, &#x27;Recall&#x27;, &#x27;F1-Score&#x27;]
+colors_list = [&#x27;#3498db&#x27;, &#x27;#2ecc71&#x27;, &#x27;#e74c3c&#x27;, &#x27;#f39c12&#x27;, &#x27;#9b59b6&#x27;, &#x27;#1abc9c&#x27;]
+
+for idx, metric in enumerate(metrics):
+ ax = axes[idx // 2, idx % 2]
+ bars = ax.bar(results_comparison[&#x27;Model&#x27;], results_comparison[metric], color=colors_list)
+ ax.set_title(f&#x27;{metric} Comparison&#x27;, fontsize=14, fontweight=&#x27;bold&#x27;)
+ ax.set_ylabel(metric)
+ ax.set_ylim([0, 1.05])
+ ax.grid(axis=&#x27;y&#x27;, alpha=0.3)
+ ax.set_xticklabels(results_comparison[&#x27;Model&#x27;], rotation=45, ha=&#x27;right&#x27;)
+ 
+ # Add values on bars
+ for bar in bars:
+ height = bar.get_height()
+ ax.text(bar.get_x() + bar.get_width()/2., height + 0.01,
+ f&#x27;{height:.3f}&#x27;, ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;, fontsize=10, fontweight=&#x27;bold&#x27;)
+
+plt.tight_layout()
+plt.show()
+
+print(&quot;[OK] Comparison charts created!&quot;)</code></pre>
+
+<hr>
+<h1> PART 4: CONCLUSIONS AND RECOMMENDATIONS</h1>
+<hr>
+
+<h2>Detailed Analysis</h2>
+
+<h3>1. Logistic Regression</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Simple algorithm, fast training</li>
+<li>Reasonably effective with linearly separable data</li>
+<li>Good for baseline model</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Need fast, simple model for deployment</li>
+<li>Need probability predictions</li>
+<li>Data is linearly separable</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>Complex non-linear data</li>
+<li>Need highest possible accuracy</li>
+</ul>
+
+<hr>
+
+<h3>2. SVM Linear</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Good performance with high-dimensional data</li>
+<li>Slower training than Logistic Regression</li>
+<li>Robust to outliers</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Large number of features (high-dimensional)</li>
+<li>Need optimal margin</li>
+<li>Data has clear decision boundaries</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>Very large dataset (slow training)</li>
+<li>Need interpretability</li>
+</ul>
+
+<hr>
+
+<h3>3. SVM RBF</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Handles non-linear data well</li>
+<li>Very slow training, sensitive to hyperparameters</li>
+<li>Easy to overfit if not tuned carefully</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Complex non-linear data</li>
+<li>Have time for hyperparameter tuning</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>Need fast training and prediction</li>
+<li>Very large dataset</li>
+</ul>
+
+<hr>
+
+<h3>4. Random Forest</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Very good performance, robust</li>
+<li>Less prone to overfitting, no need for standardization</li>
+<li>Large model size, harder to deploy</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Need high accuracy and stability</li>
+<li>Need feature importance</li>
+<li>Don't need high interpretability</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>Need lightweight model for mobile/edge deployment</li>
+<li>Need very fast real-time prediction</li>
+</ul>
+
+<hr>
+
+<h3>5. XGBoost</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Usually provides highest accuracy</li>
+<li>Flexible, many hyperparameters</li>
+<li>Slower training than Random Forest</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Need maximum accuracy</li>
+<li>Complex non-linear data</li>
+<li>Have time for hyperparameter tuning</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>Need simple model</li>
+<li>Limited compute resources</li>
+</ul>
+
+<hr>
+
+<h3>6. KNN</h3>
+
+<p><strong>Evaluation:</strong></p>
+<ul>
+<li>Simple, no training required</li>
+<li>Slow prediction (must compute distances)</li>
+<li>Not effective with high-dimensional data</li>
+</ul>
+
+<p><strong>When to use:</strong></p>
+<ul>
+<li>Small dataset</li>
+<li>Need quick baseline</li>
+<li>Low-dimensional data</li>
+</ul>
+
+<p><strong>When NOT to use:</strong></p>
+<ul>
+<li>High-dimensional data (curse of dimensionality)</li>
+<li>Need fast prediction for production</li>
+<li>Large dataset</li>
+</ul>
+
+<hr>
+
+<h2>Final Summary</h2>
+
+<h3>Recommended Models for Driver Monitoring System</h3>
+
+<p><strong>TOP 3 Choices:</strong></p>
+
+<ol>
+<li><strong>Random Forest</strong> - HIGHLY RECOMMENDED</li>
+ - High accuracy, stable
+ - Not sensitive to outliers
+ - Feature importance helps understand model
+ - Saved to <code>model_random_forest.pkl</code>
+</ol>
+
+<ol>
+<li><strong>XGBoost</strong> - RECOMMENDED</li>
+ - Similar accuracy to Random Forest
+ - Slower training but fast prediction
+ - Good if need optimal accuracy
+</ol>
+
+<ol>
+<li><strong>SVM RBF</strong> - ALTERNATIVE</li>
+ - Good for smaller datasets
+ - Requires careful hyperparameter tuning
+</ol>
+
+<h3>Future Development Directions</h3>
+
+<ol>
+<li><strong>Collect more data</strong>: Increase samples per class</li>
+<li><strong>Feature Engineering</strong>: Extract features like EAR, MAR, Head Pose</li>
+<li><strong>Ensemble Methods</strong>: Combine multiple models (voting, stacking)</li>
+<li><strong>Deep Learning</strong>: Try Neural Networks with more data</li>
+<li><strong>Model Optimization</strong>: Quantization, pruning for edge device deployment</li>
+</ol>
+
+<hr>
+
+<h3>Deployment Notes</h3>
+
+<ul>
+<li><strong>Random Forest</strong> is the best choice for production</li>
+<li>Save both <code>scaler.pkl</code> and model to ensure proper standardization</li>
+<li>Test model on real-world data before deployment</li>
+<li>Monitor model performance over time</li>
+</ul>
+
+<hr>
+
+<p><strong>COMPLETED!</strong> This notebook provides detailed comparison of 6 ML algorithms.</p>
+
+<hr>
+<div class="section-divider"><h1>Deployment and Conclusions</h1><h2>Production Ready System</h2></div>
+
+<hr>
+
+<h2>Final Results Summary</h2>
+
+<div class="stats-grid">
+ <div class="stat-card">
+ <h2>99.51%</h2>
+ <p>Best Accuracy</p>
+ <p style="font-size: 14px; color: #6c757d;">Random Forest</p>
+ </div>
+ <div class="stat-card">
+ <h2>30+ FPS</h2>
+ <p>Real-Time Speed</p>
+ <p style="font-size: 14px; color: #6c757d;">Production Ready</p>
+ </div>
+ <div class="stat-card">
+ <h2>3,052</h2>
+ <p>Training Samples</p>
+ <p style="font-size: 14px; color: #6c757d;">Balanced Dataset</p>
+ </div>
+</div>
+
+<h2> Model Selection: Random Forest</h2>
+
+<h3>Why Random Forest?</h3>
+
+<p><table style="width:100%; border-collapse: collapse; margin: 20px 0;"></p>
+<p><tr style="background: #f8fafc;"></p>
+<p><th style="padding: 15px; text-align: left; border-bottom: 2px solid #e2e8f0;">Criterion</th></p>
+<p><th style="padding: 15px; text-align: left; border-bottom: 2px solid #e2e8f0;">Random Forest</th></p>
+<p><th style="padding: 15px; text-align: left; border-bottom: 2px solid #e2e8f0;">Other Models</th></p>
+<p></tr></p>
+<p><tr></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"><strong>Accuracy</strong></td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"> 99.51% (Best)</td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">95.74% - 99.18%</td></p>
+<p></tr></p>
+<p><tr style="background: #f8fafc;"></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"><strong>Training Time</strong></td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"> 12.3s (Fast)</td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">0.5s - 189s</td></p>
+<p></tr></p>
+<p><tr></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"><strong>Robustness</strong></td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"> Excellent</td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">Varies</td></p>
+<p></tr></p>
+<p><tr style="background: #f8fafc;"></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"><strong>Overfitting Risk</strong></td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;"> Low</td></p>
+<p><td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">Varies</td></p>
+<p></tr></p>
+<p><tr></p>
+<p><td style="padding: 15px;"><strong>Interpretability</strong></td></p>
+<p><td style="padding: 15px;"> Feature Importance</td></p>
+<p><td style="padding: 15px;">Limited</td></p>
+<p></tr></p>
+<p></table></p>
+
+<hr>
+
+<a id='5-deployment'></a>
+<h2>5. Deployment Guide</h2>
+
+<h3>System Requirements</h3>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin: 2rem 0;">
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Hardware Requirements</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Camera:</strong> Webcam or built-in camera</li>
+            <li><strong>CPU:</strong> Modern multi-core processor</li>
+            <li><strong>RAM:</strong> 4GB+ recommended</li>
+            <li><strong>OS:</strong> Windows 10/11, macOS, Linux</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Software Requirements</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Python:</strong> 3.8 - 3.11</li>
+            <li><strong>OpenCV:</strong> 4.8+</li>
+            <li><strong>MediaPipe:</strong> 0.10.9</li>
+            <li><strong>scikit-learn:</strong> 1.3+</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Installation Steps</h3>
+
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+    
+    <div style="margin-bottom: 2rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Step 1: Clone or Download Project</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 1rem; border-radius: 6px; margin: 0;"><code>git clone https://github.com/yourusername/driver-monitoring-system.git
+cd driver-monitoring-system</code></pre>
+    </div>
+    
+    <div style="margin-bottom: 2rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Step 2: Install Dependencies</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 1rem; border-radius: 6px; margin: 0;"><code>pip install -r requirements.txt</code></pre>
+    </div>
+    
+    <div>
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Step 3: Run the System</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 1rem; border-radius: 6px; margin: 0;"><code>python drowsiness_detection_system.py</code></pre>
+    </div>
+    
+</div>
+
+<h3>Usage Instructions</h3>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">1. Data Collection</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; margin: 0 0 1rem 0;"><code>python data_collector.py</code></pre>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Hold keys 0-3 for each state</li>
+            <li>Collect 600-800 samples each</li>
+            <li>Press 'q' to save and exit</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">2. Model Training</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; margin: 0 0 1rem 0;"><code>python model_trainer.py</code></pre>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Trains Random Forest model</li>
+            <li>Training time: 1-2 minutes</li>
+            <li>Saves to drowsiness_model.pkl</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">3. Model Comparison</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; margin: 0 0 1rem 0;"><code>jupyter notebook</code></pre>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Compare 6 ML algorithms</li>
+            <li>View performance metrics</li>
+            <li>Analyze detailed results</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">4. Run Detection System</h4>
+        <pre style="background: #ffffff; border: 1px solid #dddddd; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; margin: 0 0 1rem 0;"><code>python drowsiness_detection_system.py</code></pre>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Auto-calibration: 5 seconds</li>
+            <li>Real-time detection starts</li>
+            <li>Press 'q' to quit</li>
+        </ul>
+    </div>
+    
+</div>
+
+<hr>
+
+<a id='6-future-improvements'></a>
+<h2>6. Future Improvements</h2>
+
+<p>While the current system achieves excellent performance (99.51% accuracy), there are several areas for enhancement and expansion to make it even more robust and feature-rich.</p>
+
+<h3>Short Term (1-3 months)</h3>
+
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 1.5rem 0;">
+    <ul style="margin: 0; padding-left: 2rem; line-height: 2;">
+        <li><strong>Glasses Detection Support:</strong> Improve detection accuracy for drivers wearing glasses or sunglasses by training on additional data with eyewear variations</li>
+        <li><strong>Multi-Face Tracking:</strong> Support multiple people in frame for carpooling scenarios or training purposes</li>
+        <li><strong>Session Recording & Analytics:</strong> Log detection events with timestamps, generate daily/weekly reports, and track driver fatigue patterns over time</li>
+        <li><strong>Mobile App Integration:</strong> Develop companion mobile app for smartphones to monitor detection history and receive alerts remotely</li>
+        <li><strong>Customizable Alert Thresholds:</strong> Allow users to adjust sensitivity levels based on personal preferences and driving conditions</li>
+    </ul>
+</div>
+
+<h3>Medium Term (3-6 months)</h3>
+
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 1.5rem 0;">
+    <ul style="margin: 0; padding-left: 2rem; line-height: 2;">
+        <li><strong>Deep Learning Models:</strong> Implement CNN-based facial expression recognition and LSTM networks for temporal sequence analysis to capture drowsiness progression</li>
+        <li><strong>Transfer Learning:</strong> Leverage pre-trained models (VGGFace, FaceNet) for better feature extraction and reduced training time</li>
+        <li><strong>Low-Light Detection:</strong> Enhance performance in night driving conditions using infrared cameras or improved image preprocessing techniques</li>
+        <li><strong>Multi-Language Support:</strong> Add voice warnings in multiple languages (Spanish, Chinese, French, etc.) with user-selectable preferences</li>
+        <li><strong>Advanced Calibration:</strong> Implement adaptive calibration that learns individual driver baseline over multiple sessions</li>
+        <li><strong>Distraction Detection:</strong> Expand beyond drowsiness to detect texting, eating, or other distracted behaviors</li>
+    </ul>
+</div>
+
+<h3>Long Term (6-12 months)</h3>
+
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 1.5rem 0;">
+    <ul style="margin: 0; padding-left: 2rem; line-height: 2;">
+        <li><strong>Steering Wheel Monitoring:</strong> Integrate steering wheel grip sensors to detect microsleep events through hand position and grip strength changes</li>
+        <li><strong>Lane Departure Integration:</strong> Combine with lane detection systems to correlate drowsiness with driving behavior anomalies</li>
+        <li><strong>Cloud-Based Fleet Management:</strong> Enterprise solution for fleet operators with centralized monitoring dashboard, real-time alerts, and driver safety scoring</li>
+        <li><strong>iOS/Android Native Apps:</strong> Full-featured mobile applications with offline mode, Bluetooth connectivity to car systems, and emergency contact notifications</li>
+        <li><strong>Wearable Integration:</strong> Connect with smartwatches or fitness trackers to incorporate heart rate, sleep quality, and stress level data</li>
+        <li><strong>Voice Command Interface:</strong> Hands-free control using voice commands for starting/stopping monitoring and adjusting settings</li>
+        <li><strong>Edge Deployment:</strong> Optimize models for edge devices (Raspberry Pi, NVIDIA Jetson) for in-car installation without laptop dependency</li>
+    </ul>
+</div>
+
+<hr>
+
+<h2>Project Summary</h2>
+
+<h3>What We Built</h3>
+
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+    <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #dddddd;">
+            <strong style="color: #000000; font-size: 1.125rem;">Complete AI System</strong> for driver drowsiness detection
+        </li>
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #dddddd;">
+            <strong style="color: #000000; font-size: 1.125rem;">6 ML Algorithms</strong> compared and evaluated
+        </li>
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #dddddd;">
+            <strong style="color: #000000; font-size: 1.125rem;">99.51% Accuracy</strong> achieved with Random Forest
+        </li>
+        <li style="padding: 0.75rem 0; border-bottom: 1px solid #dddddd;">
+            <strong style="color: #000000; font-size: 1.125rem;">Real-time Performance</strong> at 30+ FPS
+        </li>
+        <li style="padding: 0.75rem 0;">
+            <strong style="color: #000000; font-size: 1.125rem;">Production Ready</strong> with auto-calibration
+        </li>
+    </ul>
+</div>
+
+<h3>Skills Demonstrated</h3>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Computer Vision</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>OpenCV for video processing</li>
+            <li>MediaPipe for face detection</li>
+            <li>Real-time optimization</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Machine Learning</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Model selection & comparison</li>
+            <li>Hyperparameter tuning</li>
+            <li>Performance optimization</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Data Science</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Data collection & labeling</li>
+            <li>Exploratory analysis</li>
+            <li>Visualization with matplotlib</li>
+        </ul>
+    </div>
+    
+    <div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 1.5rem;">
+        <h4 style="margin: 0 0 1rem 0; color: #000000; font-weight: 700;">Software Engineering</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1rem; line-height: 1.7;">
+            <li>Modular code design</li>
+            <li>Error handling</li>
+            <li>Documentation</li>
+        </ul>
+    </div>
+    
+</div>
+
+<hr>
+
+<a id='4-model-evaluation'></a>
+<h2>4. Model Evaluation & Visualization</h2>
+
+<p>We implemented comprehensive evaluation procedures to validate the model's performance across multiple dimensions. The following professional visualizations and analyses demonstrate the system's robustness and reliability.</p>
 
 <h3>System Performance Specifications</h3>
 
-<table>
-<thead>
-<tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff;">
-<th style="padding: 0.875rem; border: 1px solid #667eea; color: #ffffff;">Performance Metric</th>
-<th style="padding: 0.875rem; border: 1px solid #667eea; color: #ffffff;">Specification</th>
-<th style="padding: 0.875rem; border: 1px solid #667eea; color: #ffffff;">Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Average FPS</strong></td>
-<td>25-30 FPS</td>
-<td>On Standard CPU (Intel i5/i7)</td>
-</tr>
-<tr>
-<td><strong>Latency</strong></td>
-<td>&lt; 50ms</td>
-<td>Per frame processing time</td>
-</tr>
-<tr>
-<td><strong>Model Size</strong></td>
-<td>&lt; 10MB</td>
-<td>Lightweight, memory-efficient</td>
-</tr>
-<tr>
-<td><strong>Hardware Requirement</strong></td>
-<td>No GPU Required</td>
-<td>Pure CPU inference</td>
-</tr>
-<tr>
-<td><strong>Test Set Accuracy</strong></td>
-<td><strong>99.51%</strong></td>
-<td>Random Forest classifier</td>
-</tr>
-</tbody>
-</table>
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #000000; color: #ffffff;">
+                <th style="padding: 1rem; text-align: left; border: 1px solid #000000;">Performance Metric</th>
+                <th style="padding: 1rem; text-align: left; border: 1px solid #000000;">Specification</th>
+                <th style="padding: 1rem; text-align: left; border: 1px solid #000000;">Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>Average FPS</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">25-30 FPS</td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">On Standard CPU (Intel i5/i7)</td>
+            </tr>
+            <tr style="background: #f9f9f9;">
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>Latency</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">&lt; 50ms</td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">Per frame processing time</td>
+            </tr>
+            <tr>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>Model Size</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">&lt; 10MB</td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">Lightweight, memory-efficient</td>
+            </tr>
+            <tr style="background: #f9f9f9;">
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>Hardware Requirement</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">No GPU Required</td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">Pure CPU inference for accessibility</td>
+            </tr>
+            <tr>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>Test Set Accuracy</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;"><strong>99.51%</strong></td>
+                <td style="padding: 0.875rem; border: 1px solid #dddddd;">Random Forest classifier</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <h3>Figure 1: Confusion Matrix on Test Set</h3>
 
-<div style="text-align: center; margin: 2.5rem 0;">
-<img src="confusion_matrix.png" alt="Confusion Matrix showing 99.51% accuracy">
-<p style="margin-top: 1.25rem; color: #1a202c; font-size: 0.9375rem; font-weight: 600;">Figure 1: Confusion Matrix - Demonstrating exceptional class separation</p>
+<div style="text-align: center; margin: 3rem 0;">
+    <img src="confusion_matrix.png" alt="Confusion Matrix showing Random Forest classifier performance with 99.51% accuracy" style="max-width: 80%; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+    <p style="margin-top: 1.5rem; color: #000000; font-size: 0.95rem; font-weight: 600;">Figure 1: Confusion Matrix on Test Set</p>
 </div>
 
-<div class="info-box">
-<strong>Analysis:</strong> The model achieves distinct separation between 'Looking Down (Phone)' and 'Drowsiness', solving the common False Positive issue in geometry-based methods. Diagonal dominance confirms minimal misclassification.
+<div style="background: #f9f9f9; border-left: 4px solid #000000; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 6px;">
+    <p style="margin: 0; line-height: 1.8; color: #000000;">
+        <strong>Analysis:</strong> The Confusion Matrix demonstrates the model's exceptional ability to distinguish between similar behaviors. Notably, the separation between 'Looking Down (Phone)' and 'Drowsiness' is distinct, proving that the system successfully overcomes the common 'False Positive' issue found in traditional geometry-based methods. The diagonal dominance indicates high precision and recall across all classes, with minimal misclassification between states.
+    </p>
 </div>
 
-<h3>Figure 2: Top 20 Feature Importance</h3>
+<h3>Figure 2: Top 20 Features Contributing to Detection</h3>
 
-<div style="text-align: center; margin: 2.5rem 0;">
-<img src="feature_importance.png" alt="Top 20 facial landmark features">
-<p style="margin-top: 1.25rem; color: #1a202c; font-size: 0.9375rem; font-weight: 600;">Figure 2: Model learned correct physiological indicators</p>
+<div style="text-align: center; margin: 3rem 0;">
+    <img src="feature_importance.png" alt="Bar chart showing top 20 most important facial landmark features for drowsiness detection" style="max-width: 80%; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+    <p style="margin-top: 1.5rem; color: #000000; font-size: 0.95rem; font-weight: 600;">Figure 2: Top 20 Features Contributing to Detection</p>
 </div>
 
-<div class="info-box">
-<strong>Analysis:</strong> The model prioritizes eye landmarks (EAR) and nose-chin distance (Head Pitch). This confirms it learned correct fatigue indicators, not background noise.
+<div style="background: #f9f9f9; border-left: 4px solid #000000; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 6px;">
+    <p style="margin: 0; line-height: 1.8; color: #000000;">
+        <strong>Analysis:</strong> Random Forest interpretation reveals that the model prioritizes landmarks around the eyes (EAR components) and the nose-chin vertical distance (Head Pitch). This confirms the model has learned the correct physiological indicators of fatigue rather than memorizing background noise. The feature importance distribution shows that approximately 15-20 key landmarks account for the majority of the classification decision, demonstrating efficient feature utilization.
+    </p>
 </div>
 
 <h3>Figure 3: Dataset Distribution</h3>
 
-<div style="text-align: center; margin: 2.5rem 0;">
-<img src="data_balance.png" alt="Balanced 4-class distribution">
-<p style="margin-top: 1.25rem; color: #1a202c; font-size: 0.9375rem; font-weight: 600;">Figure 3: Rigorously balanced dataset (~25% per class)</p>
+<div style="text-align: center; margin: 3rem 0;">
+    <img src="data_balance.png" alt="Pie chart showing balanced distribution across 4 classes: Awake, Drowsy, Phone, Microsleep" style="max-width: 80%; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+    <p style="margin-top: 1.5rem; color: #000000; font-size: 0.95rem; font-weight: 600;">Figure 3: Dataset Distribution</p>
 </div>
 
-<div class="info-box">
-<strong>Analysis:</strong> Balanced data prevents Majority Class Bias, ensuring equal performance across all driver states.
+<div style="background: #f9f9f9; border-left: 4px solid #000000; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 6px;">
+    <p style="margin: 0; line-height: 1.8; color: #000000;">
+        <strong>Analysis:</strong> The dataset was rigorously balanced during the data collection phase, ensuring ~25% representation for each class. This prevents the 'Majority Class Bias' often seen in medical/safety datasets, where models tend to overpredict the dominant class. Our balanced approach ensures equal learning opportunities for all driver states, resulting in a fair and unbiased classifier that performs equally well across all conditions.
+    </p>
 </div>
-
-<h3>Model Comparison</h3>
-
-<p>We compared 6 machine learning algorithms and selected Random Forest for optimal performance:</p>
-
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th>Accuracy</th>
-<th>F1-Score</th>
-<th>Training Time</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr style="background: #f0fdf4;">
-<td><strong>Random Forest</strong></td>
-<td><strong>99.51%</strong></td>
-<td><strong>0.9951</strong></td>
-<td>12.3s</td>
-<td>Best balance</td>
-</tr>
-<tr>
-<td>XGBoost</td>
-<td>99.18%</td>
-<td>0.9918</td>
-<td>45.7s</td>
-<td>High performance</td>
-</tr>
-<tr>
-<td>SVM RBF</td>
-<td>98.85%</td>
-<td>0.9885</td>
-<td>189.2s</td>
-<td>Slow training</td>
-</tr>
-<tr>
-<td>SVM Linear</td>
-<td>97.54%</td>
-<td>0.9754</td>
-<td>23.1s</td>
-<td>Good baseline</td>
-</tr>
-<tr>
-<td>Logistic Regression</td>
-<td>96.89%</td>
-<td>0.9689</td>
-<td>3.2s</td>
-<td>Fast, simple</td>
-</tr>
-<tr>
-<td>KNN</td>
-<td>95.74%</td>
-<td>0.9574</td>
-<td>0.5s</td>
-<td>Lazy learner</td>
-</tr>
-</tbody>
-</table>
-
-<p><strong>Winner:</strong> Random Forest selected for optimal accuracy (99.51%), reasonable speed (12.3s), and robustness to overfitting.</p>
 
 <hr>
 
-<a id='4-deployment'></a>
-<h2>4. Deployment Guide</h2>
+<a id='7-conclusions'></a>
+<h2>7. Conclusions</h2>
 
-<h3>Quick Start</h3>
-
-<p>Get the system running in 3 steps:</p>
-
-<ol>
-<li><strong>Clone Repository:</strong> <code>git clone https://github.com/moPPingg/sleeping-detect.git</code></li>
-<li><strong>Install Dependencies:</strong> <code>pip install -r requirements.txt</code></li>
-<li><strong>Run System:</strong> <code>python drowsiness_detection_system.py</code></li>
-</ol>
-
-<h3>System Requirements</h3>
-
-<ul>
-<li><strong>Hardware:</strong> Webcam, Modern CPU (Intel i5+), 4GB+ RAM</li>
-<li><strong>Software:</strong> Python 3.8-3.11, OpenCV 4.8+, MediaPipe 0.10.9, scikit-learn 1.3+</li>
-<li><strong>OS:</strong> Windows 10/11, macOS, Linux</li>
-</ul>
-
-<h3>Installation Steps</h3>
-
-<div class="command-box">
-<h3>Step 1: Clone Repository</h3>
-<pre><code>git clone https://github.com/moPPingg/sleeping-detect.git
-cd sleeping-detect</code></pre>
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2.5rem; margin: 2rem 0;">
+    
+    <h3 style="margin-top: 0;">Project Achievements</h3>
+    
+    <p>This Driver Monitoring System successfully demonstrates the application of computer vision and machine learning to address a critical real-world safety problem. The project achieved the following key outcomes:</p>
+    
+    <div style="margin: 2rem 0;">
+        <h4 style="color: #000000;">Technical Excellence</h4>
+        <ul style="line-height: 1.9; margin: 0.5rem 0 0 2rem;">
+            <li><strong>99.51% accuracy</strong> with Random Forest classifier after comprehensive evaluation of 6 different ML algorithms</li>
+            <li><strong>Real-time performance</strong> at 30+ FPS enabling immediate drowsiness detection</li>
+            <li><strong>Robust feature engineering</strong> using 478 facial landmarks, EAR, MAR, and head pose estimation</li>
+            <li><strong>Production-ready implementation</strong> with auto-calibration and error handling</li>
+        </ul>
+    </div>
+    
+    <div style="margin: 2rem 0;">
+        <h4 style="color: #000000;">Complete ML Pipeline</h4>
+        <ul style="line-height: 1.9; margin: 0.5rem 0 0 2rem;">
+            <li>Custom data collection tool with labeled state capture</li>
+            <li>Balanced dataset with 3,052 samples across 4 driver states</li>
+            <li>Systematic model comparison using GridSearchCV for hyperparameter optimization</li>
+            <li>Comprehensive evaluation with confusion matrices and performance metrics</li>
+            <li>Deployment-ready system with voice alerts and visual feedback</li>
+        </ul>
+    </div>
+    
+    <div style="margin: 2rem 0;">
+        <h4 style="color: #000000;">Real-World Impact Potential</h4>
+        <ul style="line-height: 1.9; margin: 0.5rem 0 0 2rem;">
+            <li>Addresses a problem causing <strong>100,000+ crashes annually</strong> in the US</li>
+            <li>Cost-effective solution using standard webcams</li>
+            <li>Scalable architecture suitable for personal use or fleet management</li>
+            <li>Foundation for future enhancements (mobile apps, cloud integration, edge deployment)</li>
+        </ul>
+    </div>
+    
+    <div style="margin: 2rem 0;">
+        <h4 style="color: #000000;">Skills Demonstrated</h4>
+        <ul style="line-height: 1.9; margin: 0.5rem 0 0 2rem;">
+            <li><strong>Computer Vision:</strong> MediaPipe Face Mesh, OpenCV, real-time video processing</li>
+            <li><strong>Machine Learning:</strong> Model selection, hyperparameter tuning, ensemble methods</li>
+            <li><strong>Data Science:</strong> Data collection, exploratory analysis, visualization</li>
+            <li><strong>Software Engineering:</strong> Modular design, error handling, documentation</li>
+            <li><strong>Problem Solving:</strong> End-to-end solution from concept to deployment</li>
+        </ul>
+    </div>
+    
 </div>
 
-<div class="command-box">
-<h3>Step 2: Install Dependencies</h3>
-<pre><code>pip install -r requirements.txt</code></pre>
-<p>Or install manually:</p>
-<pre><code>pip install opencv-python mediapipe scikit-learn pandas numpy matplotlib seaborn</code></pre>
-</div>
-
-<div class="command-box">
-<h3>Step 3: Run Detection System</h3>
-<pre><code>python drowsiness_detection_system.py</code></pre>
-<p>5-second auto-calibration, then real-time monitoring starts. Press 'q' to quit.</p>
-</div>
-
-<h3>Troubleshooting</h3>
-
-<ul>
-<li><strong>Camera Not Opening:</strong> Check permissions, try different WEBCAM_ID (0, 1, 2)</li>
-<li><strong>Low FPS:</strong> Reduce resolution, increase SKIP_FRAMES value</li>
-<li><strong>No Voice Alerts:</strong> Verify audio device, reinstall pyttsx3</li>
-<li><strong>Model Not Found:</strong> Run <code>python model_trainer.py</code></li>
-</ul>
-
-<hr>
-
-<a id='5-future-improvements'></a>
-<h2>5. Future Improvements</h2>
-
-<p>While achieving 99.51% accuracy, several strategic enhancements can expand system capabilities:</p>
-
-<h3>Short Term (1-3 months)</h3>
-
-<ul>
-<li><strong>Sunglasses/Occlusion Handling:</strong> Train on augmented data with eyewear variations to maintain accuracy when eyes are partially obscured.</li>
-<li><strong>Multi-Face Tracking:</strong> Support carpooling scenarios by monitoring multiple drivers or passengers simultaneously.</li>
-<li><strong>Session Analytics:</strong> Log timestamped events to generate daily/weekly fatigue reports and identify high-risk patterns.</li>
-</ul>
-
-<h3>Medium Term (3-6 months)</h3>
-
-<ul>
-<li><strong>Deep Learning Models:</strong> Implement CNN + LSTM for temporal sequence analysis, capturing drowsiness progression over time.</li>
-<li><strong>Night Mode Enhancement:</strong> Integrate infrared camera support or improved preprocessing for low-light conditions.</li>
-<li><strong>Distraction Detection:</strong> Expand beyond drowsiness to detect texting, eating, or other unsafe behaviors.</li>
-</ul>
-
-<h3>Long Term (6-12 months)</h3>
-
-<ul>
-<li><strong>Steering Wheel Sensors:</strong> Correlate grip strength and hand position changes with facial analysis for microsleep detection. Provides redundancy when face is temporarily obscured.</li>
-<li><strong>Lane Departure Integration:</strong> Fuse drowsiness alerts with driving behavior anomalies (lane drift, erratic steering) for comprehensive safety scoring.</li>
-<li><strong>Fleet Management Platform:</strong> Cloud-based enterprise solution with centralized dashboard, driver safety scoring, and real-time alerts for fleet operators.</li>
-</ul>
-
-<hr>
-
-<a id='6-conclusions'></a>
-<h2>6. Conclusions</h2>
-
-<h3>Project Achievements</h3>
-
-<p>This Driver Monitoring System successfully demonstrates end-to-end application of computer vision and machine learning to a critical safety problem:</p>
-
-<ul>
-<li><strong>Technical Excellence:</strong> 99.51% accuracy with Random Forest after comparing 6 algorithms</li>
-<li><strong>Real-Time Performance:</strong> 30+ FPS with &lt;50ms latency on standard CPU</li>
-<li><strong>Production-Ready:</strong> Auto-calibration, error handling, multi-modal alerts</li>
-<li><strong>Complete ML Pipeline:</strong> Custom data collection, balanced dataset, hyperparameter optimization</li>
-<li><strong>Real-World Impact:</strong> Addresses 100,000+ crashes annually, cost-effective webcam-based solution</li>
-</ul>
-
-<h3>Skills Demonstrated</h3>
-
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin: 1.75rem 0;">
-
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem;">
-<h4 style="margin: 0 0 0.75rem 0; color: #1a202c; font-weight: 700;">Computer Vision</h4>
-<ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9375rem; line-height: 1.6;">
-<li>OpenCV video processing</li>
-<li>MediaPipe face detection</li>
-<li>Real-time optimization</li>
-</ul>
-</div>
-
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem;">
-<h4 style="margin: 0 0 0.75rem 0; color: #1a202c; font-weight: 700;">Machine Learning</h4>
-<ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9375rem; line-height: 1.6;">
-<li>Model selection & comparison</li>
-<li>Hyperparameter tuning</li>
-<li>Performance optimization</li>
-</ul>
-</div>
-
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem;">
-<h4 style="margin: 0 0 0.75rem 0; color: #1a202c; font-weight: 700;">Data Science</h4>
-<ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9375rem; line-height: 1.6;">
-<li>Data collection & labeling</li>
-<li>Exploratory analysis</li>
-<li>Visualization</li>
-</ul>
-</div>
-
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 6px; padding: 1.25rem;">
-<h4 style="margin: 0 0 0.75rem 0; color: #1a202c; font-weight: 700;">Software Engineering</h4>
-<ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9375rem; line-height: 1.6;">
-<li>Modular code design</li>
-<li>Error handling</li>
-<li>Documentation</li>
-</ul>
-</div>
-
-</div>
-
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; border-radius: 8px; padding: 2rem; margin: 2.5rem 0; text-align: center;">
-<h3 style="margin: 0 0 0.75rem 0; color: #ffffff; font-size: 1.75rem;">Project Complete</h3>
-<p style="font-size: 1.125rem; margin: 0.375rem 0; color: #e0e7ff;">Driver Monitoring System</p>
-<p style="font-size: 0.9375rem; margin: 0.75rem 0 0 0; color: #c7d2fe;">Production Ready • Portfolio Ready • Extensible Architecture</p>
+<div style="background: #000000; color: #ffffff; border-radius: 8px; padding: 2.5rem; margin: 3rem 0; text-align: center;">
+    <h3 style="margin: 0 0 1rem 0; color: #ffffff; font-size: 2rem;">Project Complete</h3>
+    <p style="font-size: 1.25rem; margin: 0.5rem 0; color: #dddddd;">Driver Monitoring System</p>
+    <p style="font-size: 1rem; margin: 1rem 0 0 0; color: #777777;">Ready for Production • Portfolio Ready • Extensible Architecture</p>
 </div>
 
 <hr>
@@ -850,81 +2287,115 @@ cd sleeping-detect</code></pre>
 <a id='technology-stack'></a>
 <h2>Technology Stack & References</h2>
 
-<p>Industry-standard open-source libraries ensure reliability and maintainability:</p>
+<p>This project leverages industry-standard libraries and frameworks to ensure reliability, maintainability, and scalability. All dependencies are open-source and actively maintained.</p>
 
-<div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 2rem; margin: 1.75rem 0;">
-
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.75rem;">
-
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Core Logic</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>Python:</strong> 3.9+</li>
-</ul>
+<div style="background: #f9f9f9; border: 2px solid #dddddd; border-radius: 8px; padding: 2.5rem; margin: 2rem 0;">
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Core Logic</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Python:</strong> <span style="color: #555555;">3.9+</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Primary programming language for all modules</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Computer Vision</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">OpenCV (cv2):</strong> <span style="color: #555555;">4.8+</span>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Google MediaPipe:</strong> <span style="color: #555555;">0.10.9</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Real-time video processing & facial landmark detection</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Machine Learning</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">scikit-learn:</strong> <span style="color: #555555;">1.3+</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Random Forest, GridSearchCV, Train/Test Split, Metrics</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Data Handling</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Pandas:</strong> <span style="color: #555555;">2.0+</span>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">NumPy:</strong> <span style="color: #555555;">1.24+</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Data manipulation, numerical computing & array operations</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Model Serialization</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Pickle:</strong> <span style="color: #555555;">Built-in</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Efficient model persistence & deployment</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="margin: 0 0 1rem 0; color: #000000; font-size: 1.375rem; border-bottom: 2px solid #dddddd; padding-bottom: 0.5rem;">Visualization</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Matplotlib:</strong> <span style="color: #555555;">3.7+</span>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f5f5f5;">
+                    <strong style="color: #000000;">Seaborn:</strong> <span style="color: #555555;">0.12+</span>
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <span style="color: #555555;">Publication-quality charts & data visualization</span>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+    
 </div>
 
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Computer Vision</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>OpenCV:</strong> 4.8+</li>
-<li style="padding: 0.375rem 0;"><strong>MediaPipe:</strong> 0.10.9</li>
-</ul>
-</div>
-
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Machine Learning</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>scikit-learn:</strong> 1.3+</li>
-<li style="padding: 0.375rem 0;"><strong>XGBoost:</strong> 2.0+</li>
-</ul>
-</div>
-
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Data Handling</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>Pandas:</strong> 2.0+</li>
-<li style="padding: 0.375rem 0;"><strong>NumPy:</strong> 1.24+</li>
-</ul>
-</div>
-
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Visualization</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>Matplotlib:</strong> 3.7+</li>
-<li style="padding: 0.375rem 0;"><strong>Seaborn:</strong> 0.12+</li>
-</ul>
-</div>
-
-<div>
-<h3 style="margin: 0 0 0.875rem 0; color: #667eea; font-size: 1.25rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.375rem;">Serialization</h3>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 0.375rem 0;"><strong>Pickle:</strong> Built-in</li>
-</ul>
-</div>
-
-</div>
-
-</div>
-
-<div class="command-box">
-<h3>Complete Installation Command</h3>
-<pre><code>pip install opencv-python mediapipe scikit-learn pandas numpy matplotlib seaborn xgboost pyttsx3</code></pre>
-<p>All dependencies are listed in <code>requirements.txt</code> in the repository root.</p>
+<div style="background: #000000; color: #ffffff; border-radius: 8px; padding: 2rem; margin: 2rem 0; text-align: center;">
+    <h3 style="margin: 0 0 1rem 0; color: #ffffff; font-size: 1.5rem;">Installation Command</h3>
+    <pre style="background: #f5f5f5; color: #000000; padding: 1rem; border-radius: 6px; text-align: left; overflow-x: auto; margin: 0;"><code>pip install opencv-python mediapipe scikit-learn pandas numpy matplotlib seaborn</code></pre>
+    <p style="margin: 1rem 0 0 0; color: #777777; font-size: 0.95rem;">All dependencies listed in <code style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">requirements.txt</code></p>
 </div>
 
 <hr>
 
-<p style="text-align: center; font-size: 1.125rem; font-weight: 600; color: #1a202c; margin: 1.75rem 0;">Thank you for exploring this project!</p>
+<p style="text-align: center; font-size: 1.25rem; font-weight: 600; color: #000000; margin: 2rem 0;"><strong>Thank you for exploring this project!</strong></p>
 
-<p style="text-align: center; font-size: 1rem; color: #4b5563; margin: 0.875rem 0;">Stay Safe on the Roads!</p>
+<p style="text-align: center; font-size: 1.125rem; color: #000000; margin: 1rem 0;">Stay Safe on the Roads!</p>
 
 <hr>
 
 <footer>
-<p><strong>Driver Monitoring System</strong></p>
-<p>Technical Report - Computer Vision and Machine Learning Project</p>
-<p style="margin-top: 0.875rem; color: #6b7280; font-size: 0.875rem;">Built with Python, OpenCV, MediaPipe & scikit-learn</p>
-<p style="margin-top: 0.5rem; color: #9ca3af; font-size: 0.8125rem;">GitHub: <a href="https://github.com/moPPingg/sleeping-detect" style="color: #667eea;">github.com/moPPingg/sleeping-detect</a></p>
+ <p><strong>Driver Monitoring System</strong></p>
+ <p>Technical Report - Computer Vision and Machine Learning Project</p>
+ <p style="margin-top: 1rem; color: #555555; font-size: 0.9rem;">Built with Python, OpenCV, MediaPipe & scikit-learn</p>
 </footer>
 
 </body>
