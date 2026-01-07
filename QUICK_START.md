@@ -1,6 +1,10 @@
-# 🚀 Quick Start Guide
+# Quick Start Guide
 
-## Get Started in 3 Minutes!
+**Get the Driver Monitoring System running in 3 minutes**
+
+---
+
+## Installation
 
 ### Step 1: Install Dependencies
 
@@ -16,75 +20,115 @@ python drowsiness_detection_system.py
 
 ### Step 3: Use the System
 
-1. **Calibration** (5 seconds): Look straight at camera
-2. **Detection**: System monitors your drowsiness
-3. **Press 'q'**: To quit
+1. **Calibration Phase (5 seconds)**: Look straight at the camera with eyes open
+2. **Detection Active**: System monitors drowsiness in real-time
+3. **Exit**: Press 'q' to quit the application
 
 ---
 
-## 📚 Core Files
+## Core Files Overview
 
-### Essential Files
-- `drowsiness_detection_system.py` - Main application
-- `face_mesh_detector.py` - Face detection module
-- `drowsiness_detector.py` - Analysis module
-- `drowsiness_model.pkl` - Trained model (99.51%)
-- `scaler.pkl` - Data scaler
+### Production Files
+
+| File | Purpose |
+|------|---------|
+| `drowsiness_detection_system.py` | Main application entry point |
+| `face_mesh_detector.py` | MediaPipe face detection wrapper |
+| `drowsiness_detector.py` | Feature extraction and analysis |
+| `drowsiness_model.pkl` | Trained Random Forest model (99.51% accuracy) |
+| `scaler.pkl` | StandardScaler for feature normalization |
 
 ### Development Tools
-- `data_collector.py` - Collect your own data
-- `model_trainer.py` - Train new model
-- `ml_models_comparison.ipynb` - Compare 6 algorithms
-- `project_documentation.ipynb` - Full documentation
+
+| File | Purpose |
+|------|---------|
+| `data_collector.py` | Custom data collection utility |
+| `model_trainer.py` | Model training script |
+| `charts.py` | Performance visualization generator |
 
 ---
 
-## ⚡ Quick Commands
+## Essential Commands
 
+### Run Detection System
 ```bash
-# Run detection system
 python drowsiness_detection_system.py
-
-# Collect custom data
-python data_collector.py
-
-# Train new model
-python model_trainer.py
-
-# View ML comparison
-jupyter notebook ml_models_comparison.ipynb
-
-# View full documentation
-jupyter notebook project_documentation.ipynb
 ```
 
----
+### Collect Custom Data
+```bash
+python data_collector.py
+# Hold keys 0-3 for different states
+# Press 'q' to save and exit
+```
 
-## 🆘 Common Issues
-
-### Camera Not Opening?
-- Check camera permissions
-- Try changing `WEBCAM_ID` in code (0, 1, 2, etc.)
-
-### Model Not Found?
+### Train New Model
 ```bash
 python model_trainer.py
 ```
 
-### Need More Help?
-- Read **README.md** for detailed troubleshooting
-- Open **project_documentation.ipynb** for technical details
+### Generate Performance Charts
+```bash
+python charts.py
+```
 
 ---
 
-## 📊 What You Get
+## Troubleshooting
 
-✅ Real-time drowsiness detection  
-✅ 99.5% accuracy  
-✅ Voice & visual alerts  
-✅ Automatic calibration  
-✅ 30+ FPS performance  
+### Camera Not Opening
+
+**Solution:**
+- Verify camera permissions in OS settings
+- Try different `WEBCAM_ID` values (0, 1, 2) in the code
+- Close other applications using the camera
+- Test camera in other applications first
+
+### Model File Not Found
+
+**Solution:**
+```bash
+python model_trainer.py
+```
+This will train a new model and save it to `drowsiness_model.pkl`.
+
+### Low FPS Performance
+
+**Solution:**
+- Reduce video resolution in code settings
+- Increase `SKIP_FRAMES` parameter
+- Close background applications
+- Consider using a lighter model
+
+### No Voice Alerts
+
+**Solution:**
+- Check audio output device settings
+- Verify speakers/headphones are connected
+- Reinstall pyttsx3: `pip install --upgrade pyttsx3`
 
 ---
 
-**Happy Coding! Stay Safe! 🚗**
+## System Features
+
+| Feature | Specification |
+|---------|--------------|
+| **Accuracy** | 99.51% on test set |
+| **Performance** | 30+ FPS real-time processing |
+| **Latency** | < 50ms per frame |
+| **States Detected** | Awake, Drowsy, Looking Down, Microsleep |
+| **Alert System** | Voice warnings + visual overlay |
+| **Hardware** | Standard CPU (no GPU required) |
+
+---
+
+## Next Steps
+
+For detailed documentation:
+- **README.md** - Complete project documentation
+- **Project_Report.html** - Comprehensive technical report with visualizations
+- Review source code for customization options
+
+---
+
+**Project Repository:** [https://github.com/moPPingg/sleeping-detect](https://github.com/moPPingg/sleeping-detect)
