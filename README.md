@@ -191,7 +191,9 @@ We compared 6 machine learning algorithms and selected Random Forest for optimal
 
 For a comprehensive deep dive into the system architecture, mathematical methodology, feature engineering techniques, and future roadmap, please refer to the:
 
-**[Detailed Project Report](assets/Project_Report.html)**
+**[📖 View Detailed Project Report](https://htmlpreview.github.io/?https://github.com/moPPingg/sleeping-detect/blob/master/assets/Project_Report.html)**
+
+*(HTML report rendered via htmlpreview.github.io)*
 
 This HTML report includes:
 - Complete ML workflow and methodology
