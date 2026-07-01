@@ -1,0 +1,17 @@
+﻿Phân loại,Thư mục bọc,Nhãn (Layer),Số lượng Set
+TRAIN,haar_cropped,Awake,390
+TRAIN,haar_cropped,Microsleep,418
+TRAIN,haar_cropped,Sleep,404
+TRAIN,train_augmented,Awake,390
+TRAIN,train_augmented,Microsleep,418
+TRAIN,train_augmented,Sleep,404
+TRAIN,train_augmented_cropped,Awake,390
+TRAIN,train_augmented_cropped,Microsleep,418
+TRAIN,train_augmented_cropped,Sleep,404
+TEST,(Đi thẳng / Không có),Awake,93
+TEST,(Đi thẳng / Không có),Microsleep,92
+TEST,(Đi thẳng / Không có),Sleep,92
+-----------------,-----------------,-----------------,---
+TỔNG TRAIN,,,3636
+TỔNG TEST,,,277
+TỔNG CỘNG (ALL),,,3913

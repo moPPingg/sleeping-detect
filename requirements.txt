@@ -1,0 +1,15 @@
+joblib
+matplotlib
+mediapipe==0.10.9
+numpy
+opencv-python
+pandas
+Pillow
+pyttsx3
+scikit-learn
+scikit-learn-intelex
+scipy
+seaborn
+torch
+torchvision
+tqdm

@@ -1,0 +1,4 @@
+model,scoring,cv_splits,cv_repeats,mean_cv_score,std_cv_score,best_score,best_params,nested_cv_mean,nested_cv_std,repeated_cv_mean,repeated_cv_std
+svm,f1_macro,5,2,0.9224739278187964,0.01095910146509461,0.9224739278187964,"{'clf__C': 10, 'clf__class_weight': None, 'clf__gamma': 'scale', 'clf__kernel': 'rbf'}",0.9214801991858887,0.01199684802842159,0.9220374796656898,0.010670239703541471
+random_forest,f1_macro,5,2,0.8793355820024349,0.016310682351577687,0.8793355820024349,"{'clf__class_weight': 'balanced', 'clf__max_depth': 20, 'clf__min_samples_split': 2, 'clf__n_estimators': 300}",0.8734426983692198,0.015634612073273508,0.8765501878650627,0.01789857052152763
+knn,f1_macro,5,2,0.8429623569746869,0.023176128713263584,0.8429623569746869,"{'clf__n_neighbors': 3, 'clf__weights': 'distance'}",0.8429623569746869,0.023176128713263584,0.8425809886074831,0.01883521052973772

@@ -1,0 +1,38 @@
+# Data directories
+datasets/
+data/
+raw_data/
+processed_data/
+
+# Generated features and model artifacts
+features/
+models/
+checkpoints/
+weights/
+*.npy
+*.npz
+*.pt
+*.pth
+*.pkl
+*.joblib
+
+# Generated evaluation/demo outputs
+test_output/sorted_frames_by_prediction/
+
+# Videos
+*.mp4
+*.avi
+*.mov
+
+# Python cache and local environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Environment files and editor settings
+.env
+.env.*
+.vscode/
+.idea/
