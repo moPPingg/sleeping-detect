@@ -1,9 +1,10 @@
 import os
+from pathlib import Path
 import cv2
 import shutil
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TARGET_DIR = os.path.join(BASE_DIR, "sorted_frames_by_prediction")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+TARGET_DIR = PROJECT_ROOT / "reports" / "test_output" / "sorted_frames_by_prediction"
 
 def view_predictions():
     if not os.path.exists(TARGET_DIR):

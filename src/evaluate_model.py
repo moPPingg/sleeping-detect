@@ -2,6 +2,7 @@ from sklearnex import patch_sklearn
 patch_sklearn()
 
 import os
+from pathlib import Path
 import numpy as np
 import joblib
 import pandas as pd
@@ -15,14 +16,14 @@ from extract_features import Config
 # ==========================================
 # 1. CẤU HÌNH ĐƯỜNG DẪN THƯ MỤC
 # ==========================================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FEATURES_DIR = os.path.join(BASE_DIR, "features")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+FEATURES_DIR = PROJECT_ROOT / "features"
 
-# Thư mục LẤY model vô địch (Do voting.py xuất ra)
-MODEL_PATH = os.path.join(BASE_DIR, "voting_output", "final_ensemble_model.joblib")
+# Thư mục LẤY model vô địch (Do src/build_voting_ensemble.py xuất ra)
+MODEL_PATH = PROJECT_ROOT / "reports" / "voting_output" / "final_ensemble_model.joblib"
 
 # Thư mục LƯU toàn bộ kết quả test
-TEST_OUT_DIR = os.path.join(BASE_DIR, "test_output")
+TEST_OUT_DIR = PROJECT_ROOT / "reports" / "test_output"
 os.makedirs(TEST_OUT_DIR, exist_ok=True)
 
 print("\n" + "="*60)
@@ -34,7 +35,7 @@ print("="*60)
 # ==========================================
 if not os.path.exists(MODEL_PATH):
     print(f"[❌] LỖI: Không tìm thấy file model: {MODEL_PATH}")
-    print("Vui lòng đảm bảo bạn đã chạy voting.py thành công!")
+    print("Vui lòng đảm bảo bạn đã chạy src/build_voting_ensemble.py thành công!")
     exit()
 
 print("[INFO] Đang nạp mô hình vô địch (Best Model)...")
@@ -56,19 +57,19 @@ for file in os.listdir(FEATURES_DIR):
     if file.startswith("X_flat_") and "test" in file.lower() and file.endswith(".npy"):
         suffix = file.replace("X_flat_", "").replace(".npy", "")
         test_suffixes.append(suffix)
-        y_path = os.path.join(FEATURES_DIR, f"y_{suffix}.npy")
+        y_path = FEATURES_DIR / f"y_{suffix}.npy"
         
         if not os.path.exists(y_path):
-            y_path = os.path.join(FEATURES_DIR, f"y_labels_{suffix}.npy")
+            y_path = FEATURES_DIR / f"y_labels_{suffix}.npy"
             
         if os.path.exists(y_path):
-            X_test_list.append(np.load(os.path.join(FEATURES_DIR, file)))
+            X_test_list.append(np.load(FEATURES_DIR / file))
             y_test_list.append(np.load(y_path))
             print(f"   + Đã nạp file Test ({suffix}): {len(np.load(y_path))} mẫu")
 
 if not X_test_list:
     print("[❌] LỖI: Không tìm thấy file X_flat_test...npy nào trong thư mục features.")
-    print("Gợi ý: Đảm bảo bạn đã chạy extract_features.py cho thư mục data/test.")
+    print("Gợi ý: Đảm bảo bạn đã chạy src/extract_features.py cho thư mục data/test.")
     exit()
 
 X_test = np.vstack(X_test_list)
@@ -203,17 +204,17 @@ try:
     cfg = Config()
     
     suffix_to_dir = {
-        "test": os.path.join(BASE_DIR, 'data', 'test'),
-        "test_haar_cropped": os.path.join(BASE_DIR, 'data', 'test', 'haar_cropped'),
-        "test_augmented": os.path.join(BASE_DIR, 'data', 'test', 'train_augmented'),
-        "test_augmented_cropped": os.path.join(BASE_DIR, 'data', 'test', 'train_augmented_cropped'),
+        "test": PROJECT_ROOT / "data" / "test",
+        "test_haar_cropped": PROJECT_ROOT / "data" / "test" / "haar_cropped",
+        "test_augmented": PROJECT_ROOT / "data" / "test" / "train_augmented",
+        "test_augmented_cropped": PROJECT_ROOT / "data" / "test" / "train_augmented_cropped",
     }
     
     if test_suffixes:
         primary_suffix = test_suffixes[0]
-        test_data_dir = suffix_to_dir.get(primary_suffix, os.path.join(BASE_DIR, 'data', 'test'))
+        test_data_dir = suffix_to_dir.get(primary_suffix, PROJECT_ROOT / "data" / "test")
     else:
-        test_data_dir = os.path.join(BASE_DIR, 'data', 'test')
+        test_data_dir = PROJECT_ROOT / "data" / "test"
     
     required_frames = getattr(cfg, 'batch_size', 30)
     set_paths = build_test_set_paths(test_data_dir, required_frames=required_frames, valid_exts=cfg.valid_exts)
@@ -222,11 +223,11 @@ try:
     true_labels_for_sets = np.array([extract_true_label_from_path(p, cfg) for p in set_paths])
     
     # XUẤT ẢNH DỰ ĐOÁN VÀO test_output
-    out_base = os.path.join(TEST_OUT_DIR, 'sorted_frames_by_prediction')
+    out_base = TEST_OUT_DIR / "sorted_frames_by_prediction"
     save_frames_sorted_by_prediction(set_paths, y_pred, out_base, label_map=label_map)
     
     # XUẤT CSV MẪU SAI VÀO test_output
-    misclassified_csv = os.path.join(TEST_OUT_DIR, "misclassified_samples.csv")
+    misclassified_csv = TEST_OUT_DIR / "misclassified_samples.csv"
     save_misclassified_report(set_paths, y_pred, true_labels_for_sets, misclassified_csv, label_map=label_map)
     
 except Exception as e:
@@ -249,7 +250,7 @@ print(classification_report(y_test, y_pred))
 try:
     df_report = pd.DataFrame(report).T
     # XUẤT CSV REPORT VÀO test_output
-    report_csv_path = os.path.join(TEST_OUT_DIR, "independent_test_report.csv")
+    report_csv_path = TEST_OUT_DIR / "independent_test_report.csv"
     df_report.to_csv(report_csv_path, index=True)
     print(f"\n✅ Đã xuất báo cáo CSV: {report_csv_path}")
 except Exception as e:
@@ -283,7 +284,7 @@ try:
 
     plt.tight_layout()
     # XUẤT ẢNH MA TRẬN VÀO test_output
-    cm_fig_path = os.path.join(TEST_OUT_DIR, "independent_test_confusion_matrix.png")
+    cm_fig_path = TEST_OUT_DIR / "independent_test_confusion_matrix.png"
     plt.savefig(cm_fig_path, dpi=150)
     plt.close()
     print(f"✅ Đã xuất ảnh Ma trận nhầm lẫn: {cm_fig_path}")

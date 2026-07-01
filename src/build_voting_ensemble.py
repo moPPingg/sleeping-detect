@@ -1,27 +1,28 @@
-import os
 import logging
-import numpy as np
-import joblib
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import os
 from pathlib import Path
-from tqdm import tqdm
-from sklearn.model_selection import train_test_split
+
+import joblib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 from sklearn.ensemble import VotingClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
+from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FEATURES_DIR = os.path.join(BASE_DIR, "features")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+FEATURES_DIR = PROJECT_ROOT / "features"
 
 # ==========================================
 # CẤU HÌNH ĐƯỜNG DẪN THƯ MỤC
 # ==========================================
-TRAIN_OUT_DIR = os.path.join(BASE_DIR, "train_output")
-VOTING_OUT_DIR = os.path.join(BASE_DIR, "voting_output")
+TRAIN_OUT_DIR = PROJECT_ROOT / "reports" / "train_output"
+VOTING_OUT_DIR = PROJECT_ROOT / "reports" / "voting_output"
 os.makedirs(VOTING_OUT_DIR, exist_ok=True) 
 
 RANDOM_STATE = 42
@@ -30,16 +31,16 @@ TEST_SIZE = 0.2
 logger.info("Loading data (Anti-Leakage Version)...")
 X_train_list, y_train_list = [], []
 
-# ĐỒNG BỘ 1: Chặn file test giống y hệt train.py của em
+# ĐỒNG BỘ 1: Chặn file test giống y hệt train_models.py
 for file in os.listdir(FEATURES_DIR):
     if file.startswith("X_flat_") and file != "X_flat.npy" and "test" not in file.lower():
         suffix = file.replace("X_flat_", "").replace(".npy", "")
-        y_path = os.path.join(FEATURES_DIR, f"y_labels_{suffix}.npy")
+        y_path = FEATURES_DIR / f"y_labels_{suffix}.npy"
         if not os.path.exists(y_path):
-            y_path = os.path.join(FEATURES_DIR, f"y_{suffix}.npy")
+            y_path = FEATURES_DIR / f"y_{suffix}.npy"
             
         if os.path.exists(y_path):
-            X_train_list.append(np.load(os.path.join(FEATURES_DIR, file)))
+            X_train_list.append(np.load(FEATURES_DIR / file))
             y_train_list.append(np.load(y_path))
 
 if not X_train_list:
@@ -51,14 +52,14 @@ y = np.concatenate(y_train_list)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE, stratify=y, random_state=RANDOM_STATE)
 
-logger.info("Loading individual models from train_output...")
+logger.info("Loading individual models from reports/train_output...")
 model_names = ["svm", "random_forest", "knn"]
 loaded_models = {}
 
 for model_name in tqdm(model_names, desc="Loading models"):
-    model_path = os.path.join(TRAIN_OUT_DIR, f"best_{model_name}.joblib")
+    model_path = TRAIN_OUT_DIR / f"best_{model_name}.joblib"
     if not os.path.exists(model_path):
-        logger.error(f"Không tìm thấy model: {model_path}. Vui lòng chạy file train.py trước!")
+        logger.error(f"Không tìm thấy model: {model_path}. Vui lòng chạy file src/train_models.py trước!")
         exit(1)
         
     model = joblib.load(model_path)
@@ -77,7 +78,7 @@ voting_clf_soft = VotingClassifier(
 voting_clf_hard.fit(X_train, y_train)
 voting_clf_soft.fit(X_train, y_train)
 
-# ĐỒNG BỘ 2: Chấm điểm bằng F1-Macro giống y hệt train.py của em
+# ĐỒNG BỘ 2: Chấm điểm bằng F1-Macro giống y hệt train_models.py
 individual_scores = {}
 for model_name, model in loaded_models.items():
     y_pred_ind = model.predict(X_test)
@@ -122,7 +123,7 @@ print(classification_report(y_test, y_pred))
 # ==========================================
 # XUẤT KẾT QUẢ VÀO voting_output
 # ==========================================
-final_model_path = os.path.join(VOTING_OUT_DIR, "final_ensemble_model.joblib")
+final_model_path = VOTING_OUT_DIR / "final_ensemble_model.joblib"
 joblib.dump(voting_clf_final, final_model_path)
 logger.info(f"Đã lưu mô hình Voting vô địch vào: {final_model_path}")
 
@@ -132,7 +133,7 @@ sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=True, ax=ax)
 ax.set_title(f'Ensemble Voting ({best_strategy_name}) - Confusion Matrix', fontsize=14, fontweight='bold')
 plt.tight_layout()
 
-cm_path = os.path.join(VOTING_OUT_DIR, "ensemble_confusion_matrix.png")
+cm_path = VOTING_OUT_DIR / "ensemble_confusion_matrix.png"
 plt.savefig(cm_path, dpi=150)
 logger.info(f"Đã lưu ảnh Confusion Matrix vào: {cm_path}")
 logger.info("Hoàn tất quy trình Voting!")

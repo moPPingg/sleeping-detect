@@ -1,23 +1,22 @@
 # Data directories
-datasets/
 data/
+datasets/
 raw_data/
 processed_data/
 
 # Generated features and model artifacts
-features/
 models/
 checkpoints/
 weights/
-*.npy
-*.npz
+features/*.npy
+features/*.npz
 *.pt
 *.pth
 *.pkl
 *.joblib
 
 # Generated evaluation/demo outputs
-test_output/sorted_frames_by_prediction/
+reports/test_output/sorted_frames_by_prediction/
 
 # Videos
 *.mp4
@@ -36,3 +35,7 @@ env/
 .env.*
 .vscode/
 .idea/
+
+# Keep placeholder files for portfolio structure
+!features/.gitkeep
+!screenshots/.gitkeep

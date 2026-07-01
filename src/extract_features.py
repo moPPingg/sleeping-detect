@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 import torch
 import torch.nn as nn
 from torchvision import models
 from PIL import Image
 import numpy as np
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import List
 from tqdm import tqdm
 
 # GPU Memory Optimization
@@ -15,23 +16,23 @@ if torch.cuda.is_available():
 
 class Config:
     def __init__(self):
-        self.PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-        self.TRAIN_DIR = os.path.join(self.PROJECT_ROOT, "data", "train")
-        self.TEST_DIR = os.path.join(self.PROJECT_ROOT, "data", "test")
-        self.OUT_DIR = os.path.join(self.PROJECT_ROOT, "features") 
+        self.PROJECT_ROOT = Path(__file__).resolve().parent.parent
+        self.TRAIN_DIR = self.PROJECT_ROOT / "data" / "train"
+        self.TEST_DIR = self.PROJECT_ROOT / "data" / "test"
+        self.OUT_DIR = self.PROJECT_ROOT / "features"
         
         # Tạo thư mục output nếu chưa tồn tại
         os.makedirs(self.OUT_DIR, exist_ok=True)
         
-        self.out_lstm = os.path.join(self.OUT_DIR, "X_seq.npy")
-        self.out_rf = os.path.join(self.OUT_DIR, "X_flat.npy")
-        self.out_labels = os.path.join(self.OUT_DIR, "y.npy")
+        self.out_lstm = self.OUT_DIR / "X_seq.npy"
+        self.out_rf = self.OUT_DIR / "X_flat.npy"
+        self.out_labels = self.OUT_DIR / "y.npy"
         
         self.batch_size: int = 30  # Số frame mỗi video (dữ liệu có 30 ảnh/folder)  
         self.valid_exts: tuple = ('.jpg', '.jpeg', '.png', '.bmp')
         self.labels = {"sleep": 0, "awake": 1, "microsleep": 2}
         
-        self.data_roots: List[str] = []
+        self.data_roots: List[Path] = []
         
         # Áp dụng logic quét thông minh cho CẢ TRAIN VÀ TEST
         for target_dir in [self.TRAIN_DIR, self.TEST_DIR]:
@@ -132,12 +133,9 @@ class VectorGenerator:
             print(f"Initial GPU memory allocated: {initial_mem / 1e6:.2f} MB")
 
         for root in self.cfg.data_roots:
-            if os.path.isabs(root):
-                root_path = root
-            else:
-                root_path = os.path.normpath(os.path.join(os.path.dirname(__file__), root))
+            root_path = Path(root)
 
-            if not os.path.isdir(root_path):
+            if not root_path.is_dir():
                 print(f"[WARN] Data root not found or not a directory: {root_path}")
                 continue
 
@@ -145,7 +143,7 @@ class VectorGenerator:
             labels_root = []
 
             # Kiểm tra xem có các label folder trực tiếp không
-            subfolders_at_root = [d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d))]
+            subfolders_at_root = [d for d in os.listdir(root_path) if (root_path / d).is_dir()]
             has_direct_labels = any(label.lower() in self.cfg.labels for label in subfolders_at_root)
 
             print(f"-> Processing root: {root}")
@@ -158,17 +156,17 @@ class VectorGenerator:
                     if label_key not in self.cfg.labels:
                         continue
                     
-                    l_path = os.path.join(root_path, label)
-                    if not os.path.isdir(l_path):
+                    l_path = root_path / label
+                    if not l_path.is_dir():
                         continue
                     
                     class_idx = self.cfg.labels[label_key]
-                    sets = sorted([s for s in os.listdir(l_path) if os.path.isdir(os.path.join(l_path, s))])
+                    sets = sorted([s for s in os.listdir(l_path) if (l_path / s).is_dir()])
                     
                     print(f"   Label '{label}': {len(sets)} sets found")
 
                     for set_folder in tqdm(sets, desc=f"Label: {label}", unit="set"):
-                        s_path = os.path.join(l_path, set_folder)
+                        s_path = l_path / set_folder
 
                         # Extract vector
                         vector_3d = self.extractor.get_vector(s_path, self.cfg.batch_size, self.cfg)
@@ -178,7 +176,7 @@ class VectorGenerator:
                             labels_root.append(class_idx)
             else:
                 # Cấu trúc: root -> person -> label -> set
-                persons = sorted([p for p in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, p))])
+                persons = sorted([p for p in os.listdir(root_path) if (root_path / p).is_dir()])
 
                 if not persons:
                     print(f"[WARN] No persons/labels found in data root: {root_path}")
@@ -187,21 +185,21 @@ class VectorGenerator:
                 print(f"   Persons found: {len(persons)}")
 
                 for person in tqdm(persons, desc=f"Persons", unit="person"):
-                    p_path = os.path.join(root_path, person)
+                    p_path = root_path / person
 
                     for label in sorted(os.listdir(p_path)):
                         label_key = label.lower()
                         if label_key not in self.cfg.labels:
                             continue
-                        l_path = os.path.join(p_path, label)
-                        if not os.path.isdir(l_path):
+                        l_path = p_path / label
+                        if not l_path.is_dir():
                             continue
                         class_idx = self.cfg.labels[label_key]
 
-                        sets = sorted([s for s in os.listdir(l_path) if os.path.isdir(os.path.join(l_path, s))])
+                        sets = sorted([s for s in os.listdir(l_path) if (l_path / s).is_dir()])
 
                         for set_folder in tqdm(sets, desc=f"{person}/{label}", unit="set", leave=False):
-                            s_path = os.path.join(l_path, set_folder)
+                            s_path = l_path / set_folder
 
                             # Extract vector
                             vector_3d = self.extractor.get_vector(s_path, self.cfg.batch_size, self.cfg)
@@ -210,7 +208,7 @@ class VectorGenerator:
                                 raw_data_root.append(vector_3d)
                                 labels_root.append(class_idx)
 
-            suffix = os.path.basename(root.rstrip('/\\')) or 'root'
+            suffix = root_path.name or "root"
             self.save_files_for(suffix, raw_data_root, labels_root)
             
             # Accumulate into global lists

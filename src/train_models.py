@@ -1,25 +1,26 @@
 import os
 import warnings
-import numpy as np
-import joblib
-import pandas as pd
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-from sklearn.model_selection import GridSearchCV, StratifiedKFold, RepeatedStratifiedKFold, cross_val_score, train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(__file__)
-DATA_DIR = os.path.join(BASE_DIR, "data")
-FEATURES_DIR = os.path.join(BASE_DIR, "features")
-OUTPUT_DIR = os.path.join(BASE_DIR, "train_output")
+import joblib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold, StratifiedKFold, cross_val_score, train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from tqdm import tqdm
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+FEATURES_DIR = PROJECT_ROOT / "features"
+OUTPUT_DIR = PROJECT_ROOT / "reports" / "train_output"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Configuration Constants (synced with voting.py)
+# Configuration Constants (synced with build_voting_ensemble.py)
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
 CV_SPLITS = 5
@@ -38,12 +39,12 @@ for file in os.listdir(FEATURES_DIR):
         suffix = file.replace("X_flat_", "").replace(".npy", "")
         
         # Tìm file y tương ứng
-        y_path = os.path.join(FEATURES_DIR, f"y_labels_{suffix}.npy")
+        y_path = FEATURES_DIR / f"y_labels_{suffix}.npy"
         if not os.path.exists(y_path): # Cú pháp dự phòng
-            y_path = os.path.join(FEATURES_DIR, f"y_{suffix}.npy")
+            y_path = FEATURES_DIR / f"y_{suffix}.npy"
             
         if os.path.exists(y_path):
-            X_train_list.append(np.load(os.path.join(FEATURES_DIR, file)))
+            X_train_list.append(np.load(FEATURES_DIR / file))
             y_train_list.append(np.load(y_path))
             print(f"   + Nạp thành công tập Train: {file}")
 
@@ -188,7 +189,7 @@ for model_name, mp in tqdm(model_params.items(), desc="Training models", total=l
     std_score = clf.cv_results_["std_test_score"][best_idx]
 
     cv_results_df = pd.DataFrame(clf.cv_results_)
-    cv_results_path = os.path.join(OUTPUT_DIR, f"cv_results_{model_name}.csv")
+    cv_results_path = OUTPUT_DIR / f"cv_results_{model_name}.csv"
     cv_results_df.to_csv(cv_results_path, index=False)
     print(f"Da luu cv_results_ cho {model_name} vao {cv_results_path}")
     
@@ -241,7 +242,7 @@ for model_name, mp in tqdm(model_params.items(), desc="Training models", total=l
     best_estimators[model_name] = clf.best_estimator_
     
     # Lưu individual model
-    model_path = os.path.join(OUTPUT_DIR, f"best_{model_name}.joblib")
+    model_path = OUTPUT_DIR / f"best_{model_name}.joblib"
     joblib.dump(clf.best_estimator_, model_path)
     print(f"   -> Đã lưu {model_name} vào {model_path}")
 
@@ -249,14 +250,14 @@ for model_name, mp in tqdm(model_params.items(), desc="Training models", total=l
 df_results = pd.DataFrame(results)
 print(df_results)
 
-results_path = os.path.join(OUTPUT_DIR, "gridsearch_results.csv")
+results_path = OUTPUT_DIR / "gridsearch_results.csv"
 df_results.to_csv(results_path, index=False)
 print(f"\nĐã lưu kết quả GridSearch vào {results_path}")
 
 # 5. Lưu lại Model tốt nhất tuyệt đối và Scaler
 best_model_name = df_results.loc[df_results["best_score"].idxmax()]["model"]
 best_model = best_estimators[best_model_name]
-best_model_path = os.path.join(OUTPUT_DIR, "best_model_overall.joblib")
+best_model_path = OUTPUT_DIR / "best_model_overall.joblib"
 joblib.dump(best_model, best_model_path)
 
 # 6. Danh gia tren tap test
@@ -269,11 +270,11 @@ cm = confusion_matrix(y_test, y_pred)
 print(cm)
 
 report_df = pd.DataFrame(report).T
-report_path = os.path.join(OUTPUT_DIR, "test_report.csv")
+report_path = OUTPUT_DIR / "test_report.csv"
 report_df.to_csv(report_path, index=True)
 print(f"Da luu test report vao {report_path}")
 
-cm_fig_path = os.path.join(OUTPUT_DIR, "confusion_matrix.png")
+cm_fig_path = OUTPUT_DIR / "confusion_matrix.png"
 plt.figure(figsize=(6, 5))
 plt.imshow(cm, interpolation="nearest", cmap="Blues")
 plt.title("Confusion Matrix")

@@ -1,8 +1,10 @@
 import os
+from pathlib import Path
 import pandas as pd
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = PROJECT_ROOT / "data"
+REPORTS_DIR = PROJECT_ROOT / "reports"
 
 def count_data_sets():
     if not os.path.exists(DATA_DIR):
@@ -82,7 +84,8 @@ def count_data_sets():
     
     # Xuất ra file CSV
     csv_filename = "data_summary_report.csv"
-    csv_path = os.path.join(BASE_DIR, csv_filename)
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    csv_path = REPORTS_DIR / csv_filename
     final_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
     print(f"\n✅ Đã xuất báo cáo thành công ra file: {csv_filename}")
 

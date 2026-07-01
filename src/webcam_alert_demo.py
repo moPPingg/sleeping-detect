@@ -348,7 +348,7 @@ class App:
             min_tracking_confidence=0.3,  # TỐI ƯU: Giảm từ 0.5
         )
         self.analyzer = DrowsinessAnalyzer()
-        self.ai = RealtimeAIPredictor(root / "voting_output" / "final_ensemble_model.joblib")
+        self.ai = RealtimeAIPredictor(root.parent / "reports" / "voting_output" / "final_ensemble_model.joblib")
         self.tts = VietnameseTTS()  # Khởi tạo TTS cho tiếng Việt
         self.compute_device_label = f"DEVICE: {self.ai.device.type.upper()}"
         
