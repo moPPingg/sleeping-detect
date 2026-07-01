@@ -33,6 +33,8 @@ sleep-state-detection/
 ├── requirements.txt
 ├── .gitignore
 ├── CHANGES.md
+├── docs/
+│   └── limitations.md
 ├── src/
 │   ├── extract_features.py
 │   ├── train_models.py
@@ -161,6 +163,8 @@ Reference artifacts:
 - Real-world lighting, pose, occlusion, and camera placement can reduce reliability.
 - The lower independent test score suggests limited generalization to separate data distributions.
 - The webcam demo is intended for testing and experimentation only.
+
+More detailed notes are available in `docs/limitations.md`.
 
 ## Future Improvements
 - Improve dataset quality and class balance
